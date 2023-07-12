@@ -40,6 +40,7 @@ public class EntryPoint implements ModInitializer {
 	public static final EstoutOreBlock ESTOUT_ORE_BLOCK = new EstoutOreBlock(FabricBlockSettings.create().strength(4.0f).requiresTool());
 	public static final DepthstoneBlock DEPTHSTONE_BLOCK = new DepthstoneBlock(FabricBlockSettings.create().strength(4.0f).requiresTool());
 	public static final CobbledGabbroBlock COBBLEDGABBRO_BLOCK = new CobbledGabbroBlock(FabricBlockSettings.create().strength(4.2f).requiresTool());
+	public static final DepthSand DEPTH_SAND = new DepthSand(FabricBlockSettings.create().strength(0.7f));
 
 	private static final String MOD_ID = "bloo_gloo";
 	// private static final RegistryKey<ItemGroup> BG_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "bloo-gloo"));
@@ -70,6 +71,9 @@ public class EntryPoint implements ModInitializer {
 		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "cobbledgabbro_block"), COBBLEDGABBRO_BLOCK);
 		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "cobbledgabbro_block"), new BlockItem(COBBLEDGABBRO_BLOCK, new FabricItemSettings()));
 
+		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "depthsand_block"), DEPTH_SAND);
+		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "depthsand_block"), new BlockItem(DEPTH_SAND, new FabricItemSettings()));
+
 		// Register our custom item group
 		Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, FabricItemGroup.builder()
 			.displayName(Text.translatable("gloo_bloo.item_group"))
@@ -79,6 +83,7 @@ public class EntryPoint implements ModInitializer {
 				entries.add(ESTOUT_ORE_BLOCK);
 				entries.add(DEPTHSTONE_BLOCK);
 				entries.add(COBBLEDGABBRO_BLOCK);
+				entries.add(DEPTH_SAND);
 				// entries.add(ESTOUT_ORE_BLOCK.asItem());
 			})
 			.build()

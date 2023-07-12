@@ -8,6 +8,7 @@
     "block.gloo_bloo.estout_ore_block": "Estout Ore",
     "block.gloo_bloo.estout_block": "Estout Block",
     "block.gloo_bloo.estout_brick": "Estout Brick",
+    "block.gloo_bloo.depthsand_block": "Depth sand",
 
     "item.gloo_bloo.estout_ore_item": "Estout",
     "item.gloo_bloo.estout_ore_tooltip": "It feels slimy..."

@@ -6,11 +6,13 @@
         "entries": [
           {
             "type": "minecraft:item",
-            "name": "gloo_bloo:cobbledgabbro_block"
+            "name": "gloo_bloo:depthsand_block"
           }
         ],
         "conditions": [
-          
+          {
+            "condition": "minecraft:survives_explosion"
+          }
         ]
       }
     ]
