@@ -1,0 +1,89 @@
+package com.aika;
+
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
+
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.World;
+
+public class EntryPoint implements ModInitializer {
+	// This logger is used to write text to the console and the log file.
+	// It is considered best practice to use your mod id as the logger's name.
+	// That way, it's clear which mod wrote info, warnings, and errors.
+    public static final Logger LOGGER = LoggerFactory.getLogger("gloo-bloo");
+
+	public static final EstoutOreItem ESTOUT_ORE_ITEM = new EstoutOreItem(new FabricItemSettings());
+
+	public static final EstoutOreBlock ESTOUT_ORE_BLOCK = new EstoutOreBlock(FabricBlockSettings.create().strength(4.0f).requiresTool());
+	public static final DepthstoneBlock DEPTHSTONE_BLOCK = new DepthstoneBlock(FabricBlockSettings.create().strength(4.0f).requiresTool());
+	public static final CobbledGabbroBlock COBBLEDGABBRO_BLOCK = new CobbledGabbroBlock(FabricBlockSettings.create().strength(4.2f).requiresTool());
+
+	private static final String MOD_ID = "bloo_gloo";
+	// private static final RegistryKey<ItemGroup> BG_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "bloo-gloo"));
+	private static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "test_group"));
+
+			
+
+	
+
+	@Override
+	public void onInitialize() {
+		// This code runs as soon as Minecraft is in a mod-load-ready state.
+		// However, some things (like resources) may still be uninitialized.
+		// Proceed with mild caution.
+
+		LOGGER.info("Okay i'm in");
+
+		// Register our custom item
+		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "estout_ore_item"), ESTOUT_ORE_ITEM);
+
+
+		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "estout_ore_block"), ESTOUT_ORE_BLOCK);
+		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "estout_ore_block"), new BlockItem(ESTOUT_ORE_BLOCK, new FabricItemSettings()));
+
+		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "depthstone_block"), DEPTHSTONE_BLOCK);
+		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "depthstone_block"), new BlockItem(DEPTHSTONE_BLOCK, new FabricItemSettings()));
+
+		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "cobbledgabbro_block"), COBBLEDGABBRO_BLOCK);
+		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "cobbledgabbro_block"), new BlockItem(COBBLEDGABBRO_BLOCK, new FabricItemSettings()));
+
+		// Register our custom item group
+		Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, FabricItemGroup.builder()
+			.displayName(Text.translatable("gloo_bloo.item_group"))
+			.icon(() -> new ItemStack(ESTOUT_ORE_ITEM))
+			.entries((context, entries) -> {
+				entries.add(ESTOUT_ORE_ITEM);
+				entries.add(ESTOUT_ORE_BLOCK);
+				entries.add(DEPTHSTONE_BLOCK);
+				entries.add(COBBLEDGABBRO_BLOCK);
+				// entries.add(ESTOUT_ORE_BLOCK.asItem());
+			})
+			.build()
+		);
+		
+	}
+		
+}

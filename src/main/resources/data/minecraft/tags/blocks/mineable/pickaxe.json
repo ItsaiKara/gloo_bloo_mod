@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "values": [
+        "gloo_bloo:estout_ore_block",
+        "gloo_bloo:depthstone_block",
+        "gloo_bloo:cobbledgabbro_block"
+    ]
+}

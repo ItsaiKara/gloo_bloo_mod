@@ -1,0 +1,15 @@
+{
+    "gloo_bloo.item_group": "Gloo Bloo",
+
+    "block.gloo_bloo.depthstone_block": "Gabbro",
+    "block.gloo_bloo.depthstone_brick": "Gabbro Brick",
+    "block.gloo_bloo.cobbledgabbro_block": "Cobbled Gabbro",
+
+    "block.gloo_bloo.estout_ore_block": "Estout Ore",
+    "block.gloo_bloo.estout_block": "Estout Block",
+    "block.gloo_bloo.estout_brick": "Estout Brick",
+
+    "item.gloo_bloo.estout_ore_item": "Estout",
+    "item.gloo_bloo.estout_ore_tooltip": "It feels slimy..."
+    
+}

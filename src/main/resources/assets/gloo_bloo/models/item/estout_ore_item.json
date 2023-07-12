@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+      "layer0": "gloo_bloo:item/estout_ore_item"
+    }
+  }
