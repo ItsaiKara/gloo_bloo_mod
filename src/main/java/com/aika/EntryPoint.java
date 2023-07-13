@@ -39,6 +39,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -49,13 +50,7 @@ import net.minecraft.world.World;
 
 public class EntryPoint implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger("gloo-bloo");
-
-	// Initialise the mobs/entities
-	// public static EntityLoader EntityLoader = new EntityLoader();
-	// public static EntityLoaderClient EntityLoaderClient = new EntityLoaderClient();
 
 	public static final EstoutOreItem ESTOUT_ORE_ITEM = new EstoutOreItem(new FabricItemSettings());
 
@@ -67,7 +62,6 @@ public class EntryPoint implements ModInitializer {
 	private static final String MOD_ID = "bloo_gloo";
 	// private static final RegistryKey<ItemGroup> BG_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "bloo-gloo"));
 	private static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "test_group"));
-	
 
 	
 
@@ -81,7 +75,6 @@ public class EntryPoint implements ModInitializer {
 
 		// Register our custom item
 		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "estout_ore_item"), ESTOUT_ORE_ITEM);
-
 
 		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "estout_ore_block"), ESTOUT_ORE_BLOCK);
 		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "estout_ore_block"), new BlockItem(ESTOUT_ORE_BLOCK, new FabricItemSettings()));
