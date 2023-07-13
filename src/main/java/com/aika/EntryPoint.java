@@ -21,6 +21,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.aika.blocks.CobbledGabbroBlock;
+import com.aika.blocks.DepthSand;
+import com.aika.blocks.DepthstoneBlock;
+import com.aika.blocks.EstoutOreBlock;
+import com.aika.items.EstoutOreItem;
 import com.aika.mobs.CrabEntity;
 import com.mojang.datafixers.kinds.Const.Instance;
 

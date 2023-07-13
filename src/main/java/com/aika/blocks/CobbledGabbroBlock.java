@@ -1,4 +1,4 @@
-package com.aika;
+package com.aika.blocks;
 
 import net.minecraft.block.Block;
 
