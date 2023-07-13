@@ -25,7 +25,7 @@ public class CrabEntityModel extends EntityModel<CrabEntity>{
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
         modelPartData.addChild(EntityModelPartNames.CUBE, 
-            ModelPartBuilder.create().uv(0, 0).cuboid(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F),
+            ModelPartBuilder.create().uv(0, 0).cuboid(-6F, 12F, -6F, 12F, 12F, 12F),
             ModelTransform.pivot(0F, 0F, 0F)
         );
         return TexturedModelData.of(modelData, 32, 32);
