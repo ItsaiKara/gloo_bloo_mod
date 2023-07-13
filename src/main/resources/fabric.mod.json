@@ -16,10 +16,13 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.aika.EntryPoint"
+			"com.aika.EntryPoint",
+			"com.aika.EntityLoader"
+
 		],
 		"client": [
-			"com.aika.ClientEntryPoint"
+			"com.aika.ClientEntryPoint",
+			"com.aika.EntityLoaderClient"
 		]
 	},
 	"mixins": [

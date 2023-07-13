@@ -1,9 +1,13 @@
 package com.aika;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.impl.object.builder.FabricEntityType;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -17,7 +21,16 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.aika.mobs.CrabEntity;
+import com.mojang.datafixers.kinds.Const.Instance;
+
 import net.minecraft.block.Block;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -35,6 +48,10 @@ public class EntryPoint implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger("gloo-bloo");
 
+	// Initialise the mobs/entities
+	// public static EntityLoader EntityLoader = new EntityLoader();
+	// public static EntityLoaderClient EntityLoaderClient = new EntityLoaderClient();
+
 	public static final EstoutOreItem ESTOUT_ORE_ITEM = new EstoutOreItem(new FabricItemSettings());
 
 	public static final EstoutOreBlock ESTOUT_ORE_BLOCK = new EstoutOreBlock(FabricBlockSettings.create().strength(4.0f).requiresTool());
@@ -45,8 +62,7 @@ public class EntryPoint implements ModInitializer {
 	private static final String MOD_ID = "bloo_gloo";
 	// private static final RegistryKey<ItemGroup> BG_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "bloo-gloo"));
 	private static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "test_group"));
-
-			
+	
 
 	
 
@@ -73,7 +89,7 @@ public class EntryPoint implements ModInitializer {
 
 		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "depthsand_block"), DEPTH_SAND);
 		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "depthsand_block"), new BlockItem(DEPTH_SAND, new FabricItemSettings()));
-
+		
 		// Register our custom item group
 		Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, FabricItemGroup.builder()
 			.displayName(Text.translatable("gloo_bloo.item_group"))
