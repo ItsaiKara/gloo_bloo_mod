@@ -23,9 +23,9 @@ public class CrabEntity extends PathAwareEntity {
         public static DefaultAttributeContainer.Builder setAttibutes(){
             return MobEntity.createMobAttributes()
             .add(EntityAttributes.GENERIC_MAX_HEALTH, 5.0D)
-            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.05D)
+            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.85D)
             .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0D)
-            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0D)
+            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 5.0D)
             .add(EntityAttributes.GENERIC_ARMOR, 2.0D)
             .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.5D);
         }
@@ -35,10 +35,10 @@ public class CrabEntity extends PathAwareEntity {
             super.initGoals();
             this.goalSelector.add(0, new SwimGoal(this));
             this.goalSelector.add(1, new MeleeAttackGoal(this, 1.0D, true));
-            this.goalSelector.add(2, new WanderAroundFarGoal(this, 1.0D));
-            this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
-            this.goalSelector.add(4, new LookAroundGoal(this));
-            this.goalSelector.add(5, new FleeEntityGoal(this, PlayerEntity.class, 8.0F, .5D, 1.0D));
+            this.goalSelector.add(2, new FleeEntityGoal(this, PlayerEntity.class, 8.0F, 0.2D, 0.5D));
+            this.goalSelector.add(3, new WanderAroundFarGoal(this, 0.85D));
+            this.goalSelector.add(4, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
+            this.goalSelector.add(5, new LookAroundGoal(this));
         }
 
         // @Override

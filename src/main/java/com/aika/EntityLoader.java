@@ -35,7 +35,7 @@ public class EntityLoader implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        FabricDefaultAttributeRegistry.register(CRAB, CrabEntity.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(CRAB, CrabEntity.setAttibutes());
 
         // //add spawn egg
         // Registry.register(Registry.ITEM, new Identifier("tutorial", "iron_golem_spawn_egg"), IRON_GOLEM_SPAWN_EGG);
