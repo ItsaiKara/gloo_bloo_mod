@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.aika.blocks.CobbledGabbroBlock;
+import com.aika.blocks.CrabNestBlock;
 import com.aika.blocks.DepthSand;
 import com.aika.blocks.DepthstoneBlock;
 import com.aika.blocks.EstoutOreBlock;
@@ -58,6 +59,7 @@ public class EntryPoint implements ModInitializer {
 	public static final DepthstoneBlock DEPTHSTONE_BLOCK = new DepthstoneBlock(FabricBlockSettings.create().strength(4.0f).requiresTool());
 	public static final CobbledGabbroBlock COBBLEDGABBRO_BLOCK = new CobbledGabbroBlock(FabricBlockSettings.create().strength(4.2f).requiresTool());
 	public static final DepthSand DEPTH_SAND = new DepthSand(FabricBlockSettings.create().strength(0.7f));
+	public static final CrabNestBlock CRAB_NEST = new CrabNestBlock(FabricBlockSettings.create().strength(0.5f));
 
 	private static final String MOD_ID = "bloo_gloo";
 	// private static final RegistryKey<ItemGroup> BG_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "bloo-gloo"));
@@ -87,6 +89,9 @@ public class EntryPoint implements ModInitializer {
 
 		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "depthsand_block"), DEPTH_SAND);
 		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "depthsand_block"), new BlockItem(DEPTH_SAND, new FabricItemSettings()));
+
+		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "crabnest_block"), CRAB_NEST);
+		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "crabnest_block"), new BlockItem(CRAB_NEST, new FabricItemSettings()));
 		
 		// Register our custom item group
 		Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, FabricItemGroup.builder()
@@ -98,6 +103,7 @@ public class EntryPoint implements ModInitializer {
 				entries.add(DEPTHSTONE_BLOCK);
 				entries.add(COBBLEDGABBRO_BLOCK);
 				entries.add(DEPTH_SAND);
+				entries.add(CRAB_NEST);
 				// entries.add(ESTOUT_ORE_BLOCK.asItem());
 			})
 			.build()

@@ -21,6 +21,11 @@ public class CrabEntity extends PathAwareEntity {
             super(entityType, world);
         }
 
+        // public CrabEntity(EntityType<? extends PathAwareEntity> entityType, World world, int x, int y, int z) {
+        //     super(entityType,world);
+        //     this.updatePosition(x, y, z);
+        // }
+
         public static DefaultAttributeContainer.Builder setAttibutes(){
             return MobEntity.createMobAttributes()
             .add(EntityAttributes.GENERIC_MAX_HEALTH, 5.0D)
@@ -31,13 +36,17 @@ public class CrabEntity extends PathAwareEntity {
             .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.5D);
         }
 
+        public void forceAttributes(){
+            this.setAttibutes();
+        }
+
         @Override
         public void initGoals(){
             super.initGoals();
             this.goalSelector.add(0, new SwimGoal(this));
-            this.goalSelector.add(1, new MeleeAttackGoal(this, 1.0D, true));
+            this.goalSelector.add(1, new MeleeAttackGoal(this, 0.3D, true));
             this.goalSelector.add(2, new FleeEntityGoal(this, PlayerEntity.class, 8.0F, 0.2D, 0.5D));
-            this.goalSelector.add(3, new WanderAroundFarGoal(this, 0.85D));
+            this.goalSelector.add(3, new WanderAroundFarGoal(this, 0.55D));
             this.goalSelector.add(4, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
             this.goalSelector.add(5, new LookAroundGoal(this));
         }
@@ -47,13 +56,13 @@ public class CrabEntity extends PathAwareEntity {
         //     data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
         // }
         // @Override
-        // public void playStepSound(){
-        //     this.playSound(SoundEvents.ENTITY_CHICKEN_STEP, 0.15F, .5F);
-        //     super.playStepSound(source);
+        // public void playStepSound(DamageSource source){
+        //     this.playStepSound(SoundEvents.ENTITY_CHICKEN_STEP, 0.15F, .5F);
+        //     // super.playStepSound(source);
         // }
         @Override
         protected void playHurtSound(DamageSource source){
-            this.playSound(SoundEvents.ENTITY_TURTLE_EGG_BREAK, 0.15F, .5F);
+            this.playSound(SoundEvents.ENTITY_TURTLE_EGG_BREAK, 0.15F, 1.5F);
         }
 
         // @Override
