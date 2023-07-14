@@ -5,6 +5,7 @@ import com.aika.block_entities.CrabBlockEntity;
 
 import net.fabricmc.fabric.api.client.networking.v1.C2SPlayChannelEvents.Register;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.ShapeContext;
@@ -49,6 +50,12 @@ public class CrabNestBlock extends BlockWithEntity {
             world.playSound(null, pos, SoundEvents.BLOCK_SAND_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
             
         }
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
+        return BlockRenderType.MODEL;
     }
 
     @Override

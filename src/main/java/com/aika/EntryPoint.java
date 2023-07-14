@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.impl.object.builder.FabricEntityType;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.aika.block_entities.CrabBlockEntity;
 import com.aika.blocks.CobbledGabbroBlock;
 import com.aika.blocks.CrabNestBlock;
 import com.aika.blocks.DepthSand;
@@ -31,6 +33,7 @@ import com.aika.mobs.CrabEntity;
 import com.mojang.datafixers.kinds.Const.Instance;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
@@ -61,7 +64,13 @@ public class EntryPoint implements ModInitializer {
 	public static final DepthSand DEPTH_SAND = new DepthSand(FabricBlockSettings.create().strength(0.7f));
 	public static final CrabNestBlock CRAB_NEST = new CrabNestBlock(FabricBlockSettings.create().strength(0.5f));
 
-	private static final String MOD_ID = "bloo_gloo";
+	public static final BlockEntityType<CrabBlockEntity> CRAB_BLOCK_ENTITY = Registry.register(
+        Registries.BLOCK_ENTITY_TYPE,
+        new Identifier("tutorial", "demo_block_entity"),
+        FabricBlockEntityTypeBuilder.create(CrabBlockEntity::new, CRAB_NEST).build()
+    );
+
+	private static final String MOD_ID = "gloo_bloo";
 	// private static final RegistryKey<ItemGroup> BG_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "bloo-gloo"));
 	private static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "test_group"));
 
@@ -92,11 +101,15 @@ public class EntryPoint implements ModInitializer {
 
 		Registry.register(Registries.BLOCK, new Identifier("gloo_bloo", "crabnest_block"), CRAB_NEST);
 		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "crabnest_block"), new BlockItem(CRAB_NEST, new FabricItemSettings()));
+
+		
+
+		
 		
 		// Register our custom item group
 		Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, FabricItemGroup.builder()
 			.displayName(Text.translatable("gloo_bloo.item_group"))
-			.icon(() -> new ItemStack(ESTOUT_ORE_ITEM))
+			.icon(() -> new ItemStack(DEPTHSTONE_BLOCK))
 			.entries((context, entries) -> {
 				entries.add(ESTOUT_ORE_ITEM);
 				entries.add(ESTOUT_ORE_BLOCK);

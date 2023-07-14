@@ -1,5 +1,6 @@
 package com.aika;
 
+import com.aika.blocks.CrabNestBlock;
 import com.aika.mobs.CrabEntity;
 import com.aika.mobs.CrabEntityModel;
 
@@ -31,6 +32,7 @@ public class EntityLoader implements ModInitializer {
             new Identifier("gloo_bloo", "crab"),
             FabricEntityTypeBuilder.create(SpawnGroup.AMBIENT, CrabEntity::new).dimensions(EntityDimensions.fixed(0.75f, 0.75f)).build()
     );
+
     // public static final Item CRAB_SPAWN_EGG_ITEM = new SpawnEggItem(CRAB, 0xc4c4c4, 0xadadad, new FabricItemSettings());
 
     @Override
