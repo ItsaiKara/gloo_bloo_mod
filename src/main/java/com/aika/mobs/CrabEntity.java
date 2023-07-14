@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -48,11 +49,16 @@ public class CrabEntity extends PathAwareEntity {
         // @Override
         // public void playStepSound(){
         //     this.playSound(SoundEvents.ENTITY_CHICKEN_STEP, 0.15F, .5F);
-        //     super.playStepSound();
+        //     super.playStepSound(source);
         // }
+        @Override
+        protected void playHurtSound(DamageSource source){
+            this.playSound(SoundEvents.ENTITY_TURTLE_EGG_BREAK, 0.15F, .5F);
+        }
+
         // @Override
-        // protected void playHurtSound(){
-        //     this.playSound(SoundEvents.ENTITY_TURTLE_EGG_BREAK, 0.15F, .5F);
+        // protected SoundEvent playDeathSound(){
+        //     return SoundEvents.ENTITY_TURTLE_AMBIENT_LAND;
         // }
 
 

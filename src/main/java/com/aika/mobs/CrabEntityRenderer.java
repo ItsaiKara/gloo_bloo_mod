@@ -15,6 +15,6 @@ public class CrabEntityRenderer extends MobEntityRenderer<CrabEntity, CrabEntity
 
     @Override
     public Identifier getTexture(CrabEntity entity) {
-        return new Identifier("mob", "textures/mob/crab.png");
+        return new Identifier("gloo_bloo", "textures/entity/crab/crab.png");
     }
 }

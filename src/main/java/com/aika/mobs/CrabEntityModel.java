@@ -28,7 +28,7 @@ public class CrabEntityModel extends EntityModel<CrabEntity>{
             ModelPartBuilder.create().uv(0, 0).cuboid(-6F, 12F, -6F, 12F, 12F, 12F),
             ModelTransform.pivot(0F, 0F, 0F)
         );
-        return TexturedModelData.of(modelData, 32, 32);
+        return TexturedModelData.of(modelData, 64, 64);
     }
 
     @Override
