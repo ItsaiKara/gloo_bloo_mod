@@ -21,8 +21,7 @@
 
 		],
 		"client": [
-			"com.aika.ClientEntryPoint",
-			"com.aika.EntityLoaderClient"
+			"com.aika.ClientEntryPoint"
 		]
 	},
 	"mixins": [

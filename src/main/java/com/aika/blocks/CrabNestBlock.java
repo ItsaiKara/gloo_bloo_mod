@@ -3,7 +3,7 @@ package com.aika.blocks;
 import com.aika.mobs.CrabEntity;
 import com.aika.block_entities.CrabBlockEntity;
 
-import net.fabricmc.fabric.api.client.networking.v1.C2SPlayChannelEvents.Register;
+// import net.fabricmc.fabric.api.client.networking.v1.C2SPlayChannelEvents.Register;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -13,13 +13,13 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
+
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.util.ActionResult;
+
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;

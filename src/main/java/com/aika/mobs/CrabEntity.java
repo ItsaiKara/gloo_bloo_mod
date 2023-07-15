@@ -1,7 +1,10 @@
 package com.aika.mobs;
 
-import net.minecraft.entity.Entity;
+
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -9,16 +12,23 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class CrabEntity extends PathAwareEntity {
 
-        public static final EntityType<? extends MobEntity> TYPE = null;
+        public static final EntityType<CrabEntity> CRAB = Registry.register(
+            Registries.ENTITY_TYPE,
+            new Identifier("gloo_bloo", "crab"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, CrabEntity::new).dimensions(EntityDimensions.fixed(0.75f, 0.75f)).build()
+    );
 
         public CrabEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
             super(entityType, world);
+            
         }
 
         // public CrabEntity(EntityType<? extends PathAwareEntity> entityType, World world, int x, int y, int z) {

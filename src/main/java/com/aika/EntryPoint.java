@@ -1,23 +1,19 @@
 package com.aika;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.impl.object.builder.FabricEntityType;
+
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
 
-import java.util.Optional;
+import net.minecraft.item.ItemGroup;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,28 +25,17 @@ import com.aika.blocks.DepthSand;
 import com.aika.blocks.DepthstoneBlock;
 import com.aika.blocks.EstoutOreBlock;
 import com.aika.items.EstoutOreItem;
-import com.aika.mobs.CrabEntity;
-import com.mojang.datafixers.kinds.Const.Instance;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.player.PlayerEntity;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.SpawnEggItem;
+
 import net.minecraft.registry.Registries;
-import net.minecraft.sound.SoundEvents;
+
 import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
+
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+
 
 public class EntryPoint implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -103,7 +88,7 @@ public class EntryPoint implements ModInitializer {
 		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "crabnest_block"), new BlockItem(CRAB_NEST, new FabricItemSettings()));
 
 		
-
+		LOGGER.info("Okay i'm in 2");
 		
 		
 		// Register our custom item group
@@ -121,6 +106,7 @@ public class EntryPoint implements ModInitializer {
 			})
 			.build()
 		);
+		LOGGER.info("Okay i'm in 3");
 		
 	}
 		
