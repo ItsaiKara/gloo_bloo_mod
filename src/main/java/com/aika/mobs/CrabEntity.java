@@ -1,6 +1,8 @@
 package com.aika.mobs;
 
 
+import com.mojang.datafixers.types.templates.List;
+
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -9,6 +11,8 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,6 +23,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class CrabEntity extends PathAwareEntity {
+        private int fuseTimer = 80;
+        private boolean ignited = false;
 
         public static final EntityType<CrabEntity> CRAB = Registry.register(
             Registries.ENTITY_TYPE,
@@ -79,6 +85,34 @@ public class CrabEntity extends PathAwareEntity {
         // protected SoundEvent playDeathSound(){
         //     return SoundEvents.ENTITY_TURTLE_AMBIENT_LAND;
         // }
+
+
+        public void ignite(){
+            this.ignited = true;
+            //apply levitation effect to self
+            this.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 100, 1));
+        }
+
+        //on tick 
+        @Override
+        public void tick(){
+            super.tick();
+            if (this.ignited){
+                this.fuseTimer--;
+                if (this.fuseTimer <= 0){
+                    this.explode();
+                }
+            }
+        }
+
+
+        public void explode() {
+            if (!this.getWorld().isClient) {
+                this.dead = true;
+                this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), (float)1, World.ExplosionSourceType.MOB);
+                this.discard();
+            }
+        }
 
 
     
