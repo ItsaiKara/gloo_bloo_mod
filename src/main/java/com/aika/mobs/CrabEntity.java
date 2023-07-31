@@ -57,7 +57,7 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         public static final EntityType<CrabEntity> CRAB = Registry.register(
             Registries.ENTITY_TYPE,
             new Identifier("gloo_bloo", "crab"),
-            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, CrabEntity::new).dimensions(EntityDimensions.fixed(0.75f, 0.75f)).build()
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, CrabEntity::new).dimensions(EntityDimensions.fixed(0.75f, 0.35f)).build()
         );
 
         public CrabEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
@@ -73,7 +73,7 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         public static DefaultAttributeContainer.Builder setAttibutes(){
             return MobEntity.createMobAttributes()
             .add(EntityAttributes.GENERIC_MAX_HEALTH, 5.0D)
-            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.85D)
+            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D)
             .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0D)
             .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 5.0D)
             .add(EntityAttributes.GENERIC_ARMOR, 2.0D)
@@ -87,14 +87,16 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         @Override
         public void initGoals(){
             super.initGoals();
-            this.goalSelector.add(0, new SwimGoal(this));
-            this.goalSelector.add(1, new CrabFindNestGoal(this));
-            this.goalSelector.add(1, new MeleeAttackGoal(this, 0.3D, true));
-            this.goalSelector.add(2, new CrabDigSandGoal(this));
-            this.goalSelector.add(3, new FleeEntityGoal(this, PlayerEntity.class, 8.0F, 0.2D, 0.2D));
-            this.goalSelector.add(4, new WanderAroundFarGoal(this, 0.55D));
-            this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
-            this.goalSelector.add(6, new LookAroundGoal(this));
+            this.goalSelector.add(1, new SwimGoal(this));
+            this.goalSelector.add(2, new CrabFindNestGoal(this));
+            // this.goalSelector.add(3, new MeleeAttackGoal(this, 0.3D, true));
+            this.goalSelector.add(3, new CrabDigSandGoal(this));
+            this.goalSelector.add(4, new FleeEntityGoal(this, PlayerEntity.class, 8.0F, 0.2D, 0.8D));
+            this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.55D));
+            this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
+            this.goalSelector.add(7, new LookAroundGoal(this));
+
+            // this.targetSelector.add(1, new );
         }
 
         public Block getNest (){
@@ -199,15 +201,18 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         public void tick() {
             System.out.println(this.crab.digTime + " " + this.crab.digCooldown);
             if (this.crab.digTime > 0) {
-                this.crab.digTime--;
-                if (this.crab.digTime % 5 == 0) {
-                    // System.out.println("Crab digging");
-                    //prevent crab from moving
-                    this.crab.navigation.setSpeed(0);
-                    this.crab.playSound(SoundEvents.BLOCK_SAND_BREAK, 0.15F, 1.5F);
+                if (this.crab.navigation.isIdle()){
+                    this.crab.digTime--;
+                    if (this.crab.digTime % 5 == 0) {
+                        //prevent crab from moving
+                        this.crab.navigation.setSpeed(0);
+                        this.crab.playSound(SoundEvents.BLOCK_SAND_HIT, 0.15F, 1.5F);
+                    }
+                } else {
+                    // System.out.println("nope");
+                    this.stop();
                 }
             }else  {
-                this.crab.playSound(SoundEvents.BLOCK_SAND_BREAK, 0.15F, 1.5F);
                 // this.crab.navigation.setSpeed(0.85D);
                 this.stop();
             }
@@ -217,7 +222,8 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         public void stop() {
             this.crab.digTime = 0;
             this.crab.digCooldown = MAX_DIG_COOLDOWN;
-            this.crab.setMovementSpeed(0.85f);
+            this.crab.playSound(SoundEvents.BLOCK_SAND_BREAK, 0.15F, 1.5F);
+            this.crab.setMovementSpeed((float)0.5D);
         }
     }
 }
