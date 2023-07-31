@@ -4,6 +4,7 @@ package com.aika.mobs;
 import com.aika.mobs.ai.CrabFindNestGoal;
 import com.mojang.datafixers.types.templates.List;
 
+import joptsimple.internal.AbbreviationMap;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,8 +32,18 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.object.PlayState;
 
-public class CrabEntity extends PathAwareEntity {
+public class CrabEntity extends PathAwareEntity implements GeoEntity {
         public final static int MAX_DIGTIME = 30;
         public final static int MAX_DIG_COOLDOWN = 500;
         private int fuseTimer = 80;
@@ -40,12 +51,14 @@ public class CrabEntity extends PathAwareEntity {
         private Block nestBlock = null;
         private int digCooldown = MAX_DIG_COOLDOWN;
         private int digTime = MAX_DIGTIME;
+        //GEOLIBStuff
+        private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
         public static final EntityType<CrabEntity> CRAB = Registry.register(
             Registries.ENTITY_TYPE,
             new Identifier("gloo_bloo", "crab"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, CrabEntity::new).dimensions(EntityDimensions.fixed(0.75f, 0.75f)).build()
-    );
+        );
 
         public CrabEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
             super(entityType, world);
@@ -128,6 +141,22 @@ public class CrabEntity extends PathAwareEntity {
                 this.discard();
             }
         }    
+
+        @Override
+        public AnimatableInstanceCache getAnimatableInstanceCache() {
+            return this.cache;
+        }
+
+        @Override
+        public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+            controllerRegistrar.add(new AnimationController<>(this, "controller", 0, this::predicate));
+        }
+
+        private <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState){
+            // tAnimationState.getController().setAnimation(RawAnimation.begin().then());
+            return PlayState.CONTINUE;
+        }
+
     public class CrabDigSandGoal extends Goal {
         private CrabEntity crab = null;
 

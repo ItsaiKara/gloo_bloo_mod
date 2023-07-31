@@ -3,19 +3,27 @@ package com.aika.mobs;
 import com.aika.ClientEntryPoint;
 import com.aika.EntityLoaderClient;
 
-
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-public class CrabEntityRenderer extends MobEntityRenderer<CrabEntity, CrabEntityModel> {
+public class CrabEntityRenderer extends GeoEntityRenderer<CrabEntity> {
     
-    public CrabEntityRenderer(EntityRendererFactory.Context context) {
-        super(context, new CrabEntityModel(context.getPart(ClientEntryPoint.MODEL_CRAB_LAYER)),1);
+    public CrabEntityRenderer(EntityRendererFactory.Context renderManager) {
+        super(renderManager, new CrabEntityModel());
     }
 
     @Override
-    public Identifier getTexture(CrabEntity entity) {
+    public Identifier getTextureLocation(CrabEntity entity) {
         return new Identifier("gloo_bloo", "textures/entity/crab/crab.png");
+    }
+
+    @Override
+    public void render(CrabEntity entity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight){
+        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
 }

@@ -29,7 +29,7 @@ public class ClientEntryPoint implements ClientModInitializer {
             return new CrabEntityRenderer(context);
         });
 		LOGGER.info("Registered crab renderer");
-        EntityModelLayerRegistry.registerModelLayer(MODEL_CRAB_LAYER, CrabEntityModel::getTexturedModelData);
+        // EntityModelLayerRegistry.registerModelLayer(MODEL_CRAB_LAYER, CrabEntityModel::getTexturedModelData);
 		FabricDefaultAttributeRegistry.register(CrabEntity.CRAB, CrabEntity.setAttibutes());
 		LOGGER.info("Registered crab model layer");
 	}

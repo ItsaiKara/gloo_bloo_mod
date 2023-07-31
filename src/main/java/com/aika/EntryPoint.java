@@ -55,7 +55,7 @@ public class EntryPoint implements ModInitializer {
         FabricBlockEntityTypeBuilder.create(CrabBlockEntity::new, CRAB_NEST).build()
     );
 
-	private static final String MOD_ID = "gloo_bloo";
+	public static final String MOD_ID = "gloo_bloo";
 	// private static final RegistryKey<ItemGroup> BG_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "bloo-gloo"));
 	private static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "test_group"));
 
@@ -67,7 +67,7 @@ public class EntryPoint implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("Okay i'm in");
+		LOGGER.info("Let's get this party started ...");
 
 		// Register our custom item
 		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "estout_ore_item"), ESTOUT_ORE_ITEM);
@@ -88,7 +88,7 @@ public class EntryPoint implements ModInitializer {
 		Registry.register(Registries.ITEM, new Identifier("gloo_bloo", "crabnest_block"), new BlockItem(CRAB_NEST, new FabricItemSettings()));
 
 		
-		LOGGER.info("Okay i'm in 2");
+		LOGGER.info("Items built correctly");
 		
 		
 		// Register our custom item group
@@ -106,7 +106,7 @@ public class EntryPoint implements ModInitializer {
 			})
 			.build()
 		);
-		LOGGER.info("Okay i'm in 3");
+		LOGGER.info("Registering done let's rock baby ...");
 		
 	}
 		
