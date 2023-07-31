@@ -2,15 +2,10 @@ package com.aika.mobs;
 
 
 import com.aika.mobs.ai.CrabFindNestGoal;
-import com.mojang.datafixers.types.templates.List;
-
-import joptsimple.internal.AbbreviationMap;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -22,12 +17,12 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -39,11 +34,10 @@ import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInst
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+
 import software.bernie.geckolib.core.object.PlayState;
 
-public class CrabEntity extends PathAwareEntity implements GeoEntity {
+public class CrabEntity extends AnimalEntity implements GeoEntity {
         public final static int MAX_DIGTIME = 30;
         public final static int MAX_DIG_COOLDOWN = 500;
         private int fuseTimer = 80;
@@ -51,6 +45,8 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         private Block nestBlock = null;
         private int digCooldown = MAX_DIG_COOLDOWN;
         private int digTime = MAX_DIGTIME;
+        private boolean disturbed = false;
+        private BlockPos nestPos = null;
         //GEOLIBStuff
         private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
@@ -61,7 +57,7 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         );
 
         public CrabEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
-            super(entityType, world);
+            super((EntityType<? extends AnimalEntity>) entityType, world);
             
         }
 
@@ -81,7 +77,7 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         }
 
         public void forceAttributes(){
-            this.setAttibutes();
+            CrabEntity.setAttibutes();
         }
 
         @Override
@@ -107,12 +103,6 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         protected void playHurtSound(DamageSource source){
             this.playSound(SoundEvents.ENTITY_TURTLE_EGG_BREAK, 0.15F, 1.5F);
         }
-
-        // @Override
-        // protected SoundEvent playDeathSound(){
-        //     return SoundEvents.ENTITY_TURTLE_AMBIENT_LAND;
-        // }
-
 
         public void ignite(){
             this.ignited = true;
@@ -157,6 +147,14 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         private <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState){
             // tAnimationState.getController().setAnimation(RawAnimation.begin().then());
             return PlayState.CONTINUE;
+        }
+
+        public boolean isDisturbed(){
+            return this.disturbed;
+        }
+
+        public void setDisturbed(boolean disturbed){
+            this.disturbed = disturbed;
         }
 
     public class CrabDigSandGoal extends Goal {
@@ -205,15 +203,16 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
                     this.crab.digTime--;
                     if (this.crab.digTime % 5 == 0) {
                         //prevent crab from moving
-                        this.crab.navigation.setSpeed(0);
+                        // this.crab.navigation.setSpeed(0);
                         this.crab.playSound(SoundEvents.BLOCK_SAND_HIT, 0.15F, 1.5F);
                     }
                 } else {
-                    // System.out.println("nope");
+                    this.crab.setDisturbed(true);
                     this.stop();
                 }
             }else  {
                 // this.crab.navigation.setSpeed(0.85D);
+                this.crab.setDisturbed(false);
                 this.stop();
             }
         }
@@ -222,9 +221,21 @@ public class CrabEntity extends PathAwareEntity implements GeoEntity {
         public void stop() {
             this.crab.digTime = 0;
             this.crab.digCooldown = MAX_DIG_COOLDOWN;
-            this.crab.playSound(SoundEvents.BLOCK_SAND_BREAK, 0.15F, 1.5F);
             this.crab.setMovementSpeed((float)0.5D);
+            //print isDisturbed
+            System.out.println(this.crab.isDisturbed());
+
+            if (this.crab.isDisturbed()==false){
+                this.crab.playSound(SoundEvents.BLOCK_SAND_BREAK, 0.15F, 0.5F);
+                // this.crab.navigation.setSpeed(0.85D);
+            }
         }
+    }
+
+    @Override
+    public PassiveEntity createChild(ServerWorld var1, PassiveEntity var2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'createChild'");
     }
 }
 
