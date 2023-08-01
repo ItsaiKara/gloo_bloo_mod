@@ -98,6 +98,56 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         public Block getNest (){
             return this.nestBlock;
         }
+        public boolean canNest(){
+            if (this.nestBlock == null){
+                int x = (int) this.getX();
+                int y = (int) this.getY();
+                int z = (int) this.getZ();
+                BlockState blockBellow = this.getWorld().getBlockState(new BlockPos(x, y - 1, z));
+                if (blockBellow.getBlock() == Blocks.SAND){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        }
+        
+        public void makeNest() {
+            int x = (int) this.getX();
+            int y = (int) this.getY();
+            int z = (int) this.getZ();
+            this.nestBlock = this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
+            this.nestPos = new BlockPos(x, y - 1, z);
+            this.getWorld().setBlockState(new BlockPos(x, y - 1, z), Registries.BLOCK.get(new Identifier("gloo_bloo", "crabnest_block")).getDefaultState());
+            System.out.println("Nest made");
+        }
+
+        public boolean canCrabEat(){
+            //get block bellow
+            int x = (int) this.getX();
+            int y = (int) this.getY();
+            int z = (int) this.getZ();
+            BlockState blockBellow = this.getWorld().getBlockState(new BlockPos(x, y - 1, z));
+            if (blockBellow.getBlock() == Blocks.SAND){
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public void tryToEat() {
+            if (this.canCrabEat()){
+                //eat block
+                int x = (int) this.getX();
+                int y = (int) this.getY();
+                int z = (int) this.getZ();
+                this.getWorld().setBlockState(new BlockPos(x, y - 1, z), Blocks.AIR.getDefaultState());
+                this.heal(1.0F);
+                System.out.println("Crab ate sand");
+            }
+        }
+
 
         @Override
         protected void playHurtSound(DamageSource source){
@@ -202,20 +252,22 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
                 if (this.crab.navigation.isIdle()){
                     this.crab.digTime--;
                     if (this.crab.digTime % 5 == 0) {
-                        //prevent crab from moving
-                        // this.crab.navigation.setSpeed(0);
+                        //crab is digging
                         this.crab.playSound(SoundEvents.BLOCK_SAND_HIT, 0.15F, 1.5F);
                     }
                 } else {
+                    //crab is moving
                     this.crab.setDisturbed(true);
                     this.stop();
+                    //abort,abort!
                 }
             }else  {
-                // this.crab.navigation.setSpeed(0.85D);
+                //crab is done digging
                 this.crab.setDisturbed(false);
                 this.stop();
             }
         }
+
 
         @Override
         public void stop() {
@@ -224,10 +276,17 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             this.crab.setMovementSpeed((float)0.5D);
             //print isDisturbed
             System.out.println(this.crab.isDisturbed());
-
             if (this.crab.isDisturbed()==false){
                 this.crab.playSound(SoundEvents.BLOCK_SAND_BREAK, 0.15F, 0.5F);
-                // this.crab.navigation.setSpeed(0.85D);
+                if (this.crab.canNest()){
+                    System.out.println("Crab can nest");
+                    //crab can nest so make a nest
+                    this.crab.makeNest();
+                } else {
+                    System.out.println("Crab can't nest");
+                    //crab can't nest so try to eat
+                    this.crab.tryToEat();
+                }
             }
         }
     }
@@ -237,5 +296,6 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createChild'");
     }
+
 }
 
