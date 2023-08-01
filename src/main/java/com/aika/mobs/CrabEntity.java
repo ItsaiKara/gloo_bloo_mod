@@ -32,9 +32,10 @@ import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
-
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class CrabEntity extends AnimalEntity implements GeoEntity {
@@ -195,7 +196,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         }
 
         private <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState){
-            // tAnimationState.getController().setAnimation(RawAnimation.begin().then());
+            tAnimationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
             return PlayState.CONTINUE;
         }
 

@@ -58,8 +58,7 @@ public class CrabEntityModel extends GeoModel<CrabEntity>{
 
     @Override
     public Identifier getAnimationResource(CrabEntity animatable) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAnimationResource'");
+        return new Identifier(EntryPoint.MOD_ID, "animations/crab.animation.json");
     }
 
     

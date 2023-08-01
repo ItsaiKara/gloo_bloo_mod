@@ -16,7 +16,7 @@
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "body",
+					"name": "head",
 					"parent": "crab",
 					"pivot": [0, 1, 0],
 					"cubes": [
@@ -25,7 +25,7 @@
 				},
 				{
 					"name": "mouthparts",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [0.5, 1, -1]
 				},
 				{
@@ -46,7 +46,7 @@
 				},
 				{
 					"name": "L_eye",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [1, 2, -2],
 					"cubes": [
 						{"origin": [0.5, 2, -2.5], "size": [1, 2, 1], "uv": [12, 11], "mirror": true}
@@ -54,7 +54,7 @@
 				},
 				{
 					"name": "R_eye",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [-1, 2, -2],
 					"cubes": [
 						{"origin": [-1.5, 2, -2.5], "size": [1, 2, 1], "uv": [12, 11]}
@@ -62,7 +62,7 @@
 				},
 				{
 					"name": "L_claw_seg_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [2, 1, -3],
 					"rotation": [0, 0, 25],
 					"cubes": [
@@ -98,7 +98,7 @@
 				},
 				{
 					"name": "R_claw_seg_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [-2, 1, -3],
 					"rotation": [0, 0, -25],
 					"cubes": [
@@ -134,7 +134,7 @@
 				},
 				{
 					"name": "L_leg_1_segment_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [2, 1, -1.5],
 					"rotation": [-38.50097, 20.71501, -43.41006],
 					"cubes": [
@@ -161,7 +161,7 @@
 				},
 				{
 					"name": "R_leg_1_segment_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [-2, 1, -1.5],
 					"rotation": [-38.50097, -20.71501, 43.41006],
 					"cubes": [
@@ -188,7 +188,7 @@
 				},
 				{
 					"name": "L_leg_2_segment_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [2, 1, -0.5],
 					"rotation": [-4.58217, 5.94383, -37.73802],
 					"cubes": [
@@ -215,7 +215,7 @@
 				},
 				{
 					"name": "R_leg_2_segment_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [-2, 1, -0.5],
 					"rotation": [-4.58217, -5.94383, 37.73802],
 					"cubes": [
@@ -242,7 +242,7 @@
 				},
 				{
 					"name": "L_leg_3_segment_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [2, 1, 0.5],
 					"rotation": [30.80394, -9.20495, -35.75663],
 					"cubes": [
@@ -269,7 +269,7 @@
 				},
 				{
 					"name": "R_leg_3_segment_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [-2, 1, 0.5],
 					"rotation": [30.80394, 9.20495, 35.75663],
 					"cubes": [
@@ -296,7 +296,7 @@
 				},
 				{
 					"name": "L_leg_4_segment_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [2, 1, 1.5],
 					"rotation": [61.98119, -27.97583, -42.23568],
 					"cubes": [
@@ -323,7 +323,7 @@
 				},
 				{
 					"name": "R_leg_4_segment_1",
-					"parent": "body",
+					"parent": "head",
 					"pivot": [-2, 1, 1.5],
 					"rotation": [61.98119, 27.97583, 42.23568],
 					"cubes": [
