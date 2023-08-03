@@ -1,6 +1,8 @@
 package com.aika.blocks;
 
 import com.aika.mobs.CrabEntity;
+import com.mojang.datafixers.types.templates.List;
+import com.aika.EntryPoint;
 import com.aika.block_entities.CrabBlockEntity;
 
 // import net.fabricmc.fabric.api.client.networking.v1.C2SPlayChannelEvents.Register;
@@ -19,7 +21,7 @@ import net.minecraft.sound.SoundCategory;
 
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.BooleanProperty;
-
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -30,6 +32,9 @@ public class CrabNestBlock extends BlockWithEntity {
 
     public static final BooleanProperty HAS_CRAB = BooleanProperty.of("has_crab");
     public static final BooleanProperty HAS_EGG = BooleanProperty.of("has_egg");
+    
+    private CrabEntity crab = null;
+    private CrabBlockEntity crabBlockEntity = null;
 
     public CrabNestBlock(Settings settings) {
         super(settings.sounds(BlockSoundGroup.SAND));
@@ -39,18 +44,47 @@ public class CrabNestBlock extends BlockWithEntity {
     @Override
     public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance){
         if(!world.isClient && world.random.nextInt(1) == 0){
-            //delete block
-            world.removeBlock(pos, false);
-            //spawn crab
-            EntityType crabType = (EntityType) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab"));
-            CrabEntity crab = new CrabEntity(crabType, world);
-            crab.updatePosition(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5);
-            // crab.setAttibutes();
-            world.spawnEntity(crab);
-            world.playSound(null, pos, SoundEvents.BLOCK_SAND_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            
+            this.destroy(world, state, pos, fallDistance);            
         }
     }
+
+    public void destroy(World world, BlockState state, BlockPos pos, float fallDistance){
+
+        if(!world.isClient && world.random.nextInt(1) == 0){
+            EntryPoint.LOGGER.info("Nest destroyed ...");
+            //spawn crab
+            if (crabBlockEntity != null) {
+                EntityType crabType = (EntityType) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab"));
+                CrabEntity crab = new CrabEntity(crabType, world);
+                world.spawnEntity(crab);
+                crab.updatePosition(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5);
+                // crab.setAttibutes();
+                this.crabBlockEntity.markRemoved();
+                this.crabBlockEntity = null;
+                EntryPoint.LOGGER.info("Crab exited");
+            } else if (crab != null) {
+                EntryPoint.LOGGER.info("Crab lost nest");
+                crab.destroyNest();
+            } else {
+                EntryPoint.LOGGER.info("Crab not found");
+            }
+            //delete block
+            world.removeBlock(pos, false);
+            world.playSound(null, pos, SoundEvents.BLOCK_SAND_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        }   
+    }
+
+    public CrabEntity getCrab(){
+        return crab;
+    }
+    public void setCrab(CrabEntity crab){
+        this.crab = crab;
+    }
+
+    public void enterNest(CrabEntity crab){
+        this.crab = crab;
+    }
+
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {

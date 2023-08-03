@@ -2,6 +2,7 @@ package com.aika.mobs;
 
 
 import com.aika.mobs.ai.CrabFindNestGoal;
+import com.aika.blocks.CrabNestBlock;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,6 +21,7 @@ import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.server.world.ServerWorld;
@@ -43,10 +45,10 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         public final static int MAX_DIG_COOLDOWN = 500;
         private int fuseTimer = 80;
         private boolean ignited = false;
-        private Block nestBlock = null;
         private int digCooldown = MAX_DIG_COOLDOWN;
         private int digTime = MAX_DIGTIME;
         private boolean disturbed = false;
+        private CrabNestBlock nestBlock = null;
         private BlockPos nestPos = null;
         //GEOLIBStuff
         private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
@@ -61,11 +63,6 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             super((EntityType<? extends AnimalEntity>) entityType, world);
             
         }
-
-        // public CrabEntity(EntityType<? extends PathAwareEntity> entityType, World world, int x, int y, int z) {
-        //     super(entityType,world);
-        //     this.updatePosition(x, y, z);
-        // }
 
         public static DefaultAttributeContainer.Builder setAttibutes(){
             return MobEntity.createMobAttributes()
@@ -114,14 +111,27 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             return false;
         }
         
+        /**
+         * Crab make the nest
+         */
         public void makeNest() {
             int x = (int) this.getX();
             int y = (int) this.getY();
             int z = (int) this.getZ();
-            this.nestBlock = this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
-            this.nestPos = new BlockPos(x, y - 1, z);
+            // this.nestBlock = this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
             this.getWorld().setBlockState(new BlockPos(x, y - 1, z), Registries.BLOCK.get(new Identifier("gloo_bloo", "crabnest_block")).getDefaultState());
-            System.out.println("Nest made");
+            this.nestBlock = (CrabNestBlock) this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
+            this.nestPos = new BlockPos(x, y - 1, z);
+            this.nestBlock.setCrab(this);
+            System.out.println("Nest made" + this.nestBlock.toString());
+        }
+        public void enterNest(){
+            this.nestBlock.enterNest(this);
+        }
+
+        public void destroyNest() {
+            this.nestBlock = null;
+            this.nestPos = null;
         }
 
         public boolean canCrabEat(){
@@ -176,7 +186,6 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             }
         }
 
-
         public void explode() {
             if (!this.getWorld().isClient) {
                 this.dead = true;
@@ -208,6 +217,14 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             this.disturbed = disturbed;
         }
 
+
+
+
+
+        /**
+         * CrabDigSandGoal class
+         * When a crab is on sand and attempts to dig either for food or nesting
+         */
     public class CrabDigSandGoal extends Goal {
         private CrabEntity crab = null;
 
@@ -234,7 +251,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
 
         @Override
         public void start() {
-            System.out.println("Crab started digging");
+            // System.out.println("Crab started digging");
             this.crab.digTime = MAX_DIGTIME ;
         }
         
@@ -248,7 +265,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
 
         @Override
         public void tick() {
-            System.out.println(this.crab.digTime + " " + this.crab.digCooldown);
+            // System.out.println(this.crab.digTime + " " + this.crab.digCooldown);
             if (this.crab.digTime > 0) {
                 if (this.crab.navigation.isIdle()){
                     this.crab.digTime--;
@@ -276,7 +293,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             this.crab.digCooldown = MAX_DIG_COOLDOWN;
             this.crab.setMovementSpeed((float)0.5D);
             //print isDisturbed
-            System.out.println(this.crab.isDisturbed());
+            // System.out.println(this.crab.isDisturbed());
             if (this.crab.isDisturbed()==false){
                 this.crab.playSound(SoundEvents.BLOCK_SAND_BREAK, 0.15F, 0.5F);
                 if (this.crab.canNest()){
@@ -297,6 +314,8 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createChild'");
     }
+
+    
 
 }
 
