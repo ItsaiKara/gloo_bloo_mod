@@ -1,0 +1,86 @@
+# Using git
+## Setup
+Install [git](https://git-scm.com/download/win) (bash)
+
+Open git bash (or git cmd)
+
+```shell
+cd "<path_to_desired_folder>"
+```
+```shell
+git clone https://github.com/ItsaiKara/gloo_bloo_mod.git
+```
+Log in github account if needed
+
+Code should now be downloaded, but you need to go to the right branch
+
+```shell
+git checkout <branch_name> # here dev_1.20.1
+```
+
+
+## Changed code how to upload it?
+
+First of all make sure you are in the right folder
+
+```shell
+git status
+```
+
+If you see the files you changed, you are in the right folder (otherwise use cd to navigate to the right folder)
+
+Add the files you changed to the commit, **only the files you changed**
+
+```shell
+git add <file_name> <file_name2> <file_name3> ...
+```
+
+You can check again with git status if you added the right files
+
+Now check in the git status if you are in the right branch (should not be main or dev_1.20.1).
+
+To create a new git branch (a branch is a fork in the code) use:
+
+```shell
+git checkout -b <branch_name> # should be dev_1.20.1_<name>
+```
+
+New branch is created and you can now commit your changes
+
+```shell
+git commit -m "<commit_message>" 
+#If it's a feature use "feat: <commit_message>"
+# If it's a bug fix use "fix: <commit_message>"
+# If it's a documentation change use "docs: <commit_message>"
+# If it's a code refactor use "refactor: <commit_message>"
+# If it's a work in progress use "wip: <commit_message>"
+```
+__Note:__ The prefix is just for better overview, it's highly recommended to use it
+
+Now you can push your changes to github
+```shell
+git push # You may be asked to change upstream source, just follow the instructions
+```
+
+Changes should now be uploaded to github, you can check it on github.com.
+You can now create a pull request on github.com to merge your changes into the dev_1.20.1 branch if you are done with your changes.
+
+## How to update your local code?
+
+You may need to pull the latest changes from github.com to your local code, use:
+
+```shell
+git pull
+```
+
+## How to change a branch?
+```shell
+git checkout <branch_name>
+```
+
+## Where does the models, textures and animation go ?
+src/main/ressources/assets/gloo_bloo/<models/|textures/|animations/>
+Make sure to be in the same folder and name you items correctly
+
+## More
+If you want to know more about git, check out [this](https://www.youtube.com/watch?v=SWYqp7iY_Tc) video
