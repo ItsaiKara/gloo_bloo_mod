@@ -2,6 +2,7 @@ package com.aika.mobs;
 
 
 import com.aika.mobs.ai.CrabFindNestGoal;
+import com.aika.block_entities.CrabBlockEntity;
 import com.aika.blocks.CrabNestBlock;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
@@ -122,7 +123,9 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             this.getWorld().setBlockState(new BlockPos(x, y - 1, z), Registries.BLOCK.get(new Identifier("gloo_bloo", "crabnest_block")).getDefaultState());
             this.nestBlock = (CrabNestBlock) this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
             this.nestPos = new BlockPos(x, y - 1, z);
-            this.nestBlock.setCrab(this);
+            // this.nestBlock.setCrab(this);
+            CrabBlockEntity newInhabitant = new CrabBlockEntity(this.nestPos, this.nestBlock.getStateWithProperties(this.nestBlock.getDefaultState()));
+            newInhabitant.tryEnterNest(this, 0);
             System.out.println("Nest made" + this.nestBlock.toString());
         }
         public void enterNest(){

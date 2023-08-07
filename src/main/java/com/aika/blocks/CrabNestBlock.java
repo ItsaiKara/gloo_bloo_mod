@@ -49,14 +49,13 @@ public class CrabNestBlock extends BlockWithEntity {
     }
 
     public void destroy(World world, BlockState state, BlockPos pos, float fallDistance){
-
         if(!world.isClient && world.random.nextInt(1) == 0){
             EntryPoint.LOGGER.info("Nest destroyed ...");
             //spawn crab
             if (crabBlockEntity != null) {
-                EntityType crabType = (EntityType) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab"));
-                CrabEntity crab = new CrabEntity(crabType, world);
-                world.spawnEntity(crab);
+                // EntityType crabType = (EntityType) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab"));
+                // CrabEntity crab = new CrabEntity(crabType, world);
+                // world.spawnEntity(crab);
                 crab.updatePosition(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5);
                 // crab.setAttibutes();
                 this.crabBlockEntity.markRemoved();
