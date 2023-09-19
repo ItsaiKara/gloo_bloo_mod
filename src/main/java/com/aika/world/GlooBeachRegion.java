@@ -9,22 +9,8 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
-import terrablender.api.ParameterUtils.Continentalness;
-import terrablender.api.ParameterUtils.Depth;
-import terrablender.api.ParameterUtils.Erosion;
-import terrablender.api.ParameterUtils.Humidity;
-import terrablender.api.ParameterUtils.ParameterPointListBuilder;
-import terrablender.api.ParameterUtils.Temperature;
-import terrablender.api.ParameterUtils.Weirdness;
 import terrablender.api.Region;
 import terrablender.api.RegionType;
-import terrablender.api.VanillaParameterOverlayBuilder;
-
-
-
-
-import static terrablender.api.ParameterUtils.*;
-
 public class GlooBeachRegion extends Region{
 
     public GlooBeachRegion(Identifier id,RegionType rt, int weight) {

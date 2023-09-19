@@ -1,7 +1,6 @@
 package com.aika.blocks;
 
 import com.aika.mobs.CrabEntity;
-import com.mojang.datafixers.types.templates.List;
 import com.aika.EntryPoint;
 import com.aika.block_entities.CrabBlockEntity;
 
@@ -21,7 +20,6 @@ import net.minecraft.sound.SoundCategory;
 
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -44,7 +42,7 @@ public class CrabNestBlock extends BlockWithEntity {
     @Override
     public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance){
         if(!world.isClient && world.random.nextInt(1) == 0){
-            this.destroy(world, state, pos, fallDistance);            
+            this.destroy(world, state, pos, fallDistance);
         }
     }
 
@@ -52,14 +50,12 @@ public class CrabNestBlock extends BlockWithEntity {
         if(!world.isClient && world.random.nextInt(1) == 0){
             EntryPoint.LOGGER.info("Nest destroyed ...");
             //spawn crab
-            if (crabBlockEntity != null) {
-                // EntityType crabType = (EntityType) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab"));
-                // CrabEntity crab = new CrabEntity(crabType, world);
-                // world.spawnEntity(crab);
-                crab.updatePosition(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5);
-                // crab.setAttibutes();
-                this.crabBlockEntity.markRemoved();
-                this.crabBlockEntity = null;
+            if (this.crabBlockEntity != null) {
+                //spawn a crab
+                EntityType<?> entityType = Registries.ENTITY_TYPE.get(new Identifier("aika", "crab"));
+                Entity entity = entityType.create(world);
+                entity.refreshPositionAndAngles(pos.getX(), pos.getY(), pos.getZ(), 0.0F, 0.0F);
+                world.spawnEntity(entity);
                 EntryPoint.LOGGER.info("Crab exited");
             } else if (crab != null) {
                 EntryPoint.LOGGER.info("Crab lost nest");

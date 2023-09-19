@@ -1,37 +1,30 @@
 package com.aika.block_entities;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.aika.EntityLoader;
-import com.aika.EntityLoaderClient;
+
 import com.aika.EntryPoint;
 import com.aika.mobs.CrabEntity;
 import com.google.common.collect.Lists;
 
-import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BeehiveBlockEntity;
-import net.minecraft.block.entity.BeehiveBlockEntity.BeeState;
+
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.render.debug.BeeDebugRenderer.Bee;
+
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
+
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.EntityTypeTags;
+
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+
 
 public class CrabBlockEntity extends BlockEntity {
     
@@ -53,7 +46,7 @@ public class CrabBlockEntity extends BlockEntity {
         entity.removeAllPassengers();
         System.out.println("CrabBlockEntity: Crab tries to enter nest" + entity.toString());
         this.crabs.add(new Crab(entity, ticksInHive));
-        if (1==1) {
+        if (1!=10) {
             BlockPos blockPos = this.getPos();
             entity.getWorld().playSound(null, (double)blockPos.getX(), (double)blockPos.getY(), blockPos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0f, 1.0f);
             // this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Emitter.of(entity, this.getCachedState()));

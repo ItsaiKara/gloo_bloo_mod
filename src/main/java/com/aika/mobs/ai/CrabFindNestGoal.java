@@ -1,16 +1,11 @@
 package com.aika.mobs.ai;
 
-import java.util.Optional;
-import java.util.function.Predicate;
 
-import javax.swing.text.html.parser.Entity;
 
 import com.aika.mobs.CrabEntity;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
 
 public class CrabFindNestGoal extends Goal {
     private final CrabEntity mob;
