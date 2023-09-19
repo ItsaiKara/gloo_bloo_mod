@@ -36,6 +36,7 @@ import net.minecraft.world.event.GameEvent;
 public class CrabBlockEntity extends BlockEntity {
     
     public final static BooleanProperty IS_EGG = BooleanProperty.of("false");
+    private World world;
     
     public final List<Crab> crabs = Lists.newArrayList();
 
@@ -45,18 +46,19 @@ public class CrabBlockEntity extends BlockEntity {
     
     public void tryEnterNest(Entity entity, int ticksInHive) {
         if (this.crabs.size() > 0) {
+            System.out.println("CrabBlockEntity: Crab already in nest");
             return ;
         }
         entity.stopRiding();
         entity.removeAllPassengers();
+        System.out.println("CrabBlockEntity: Crab tries to enter nest" + entity.toString());
         this.crabs.add(new Crab(entity, ticksInHive));
-        if (this.world != null) {
-            CrabEntity CrabEntity;
+        if (1==1) {
             BlockPos blockPos = this.getPos();
-            this.world.playSound(null, (double)blockPos.getX(), (double)blockPos.getY(), blockPos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            entity.getWorld().playSound(null, (double)blockPos.getX(), (double)blockPos.getY(), blockPos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0f, 1.0f);
             // this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Emitter.of(entity, this.getCachedState()));
-            entity.discard();
             this.crabs.add(new Crab(entity, ticksInHive));
+            entity.discard();
             super.markDirty();
         }
     }
