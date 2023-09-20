@@ -57,6 +57,7 @@ public class CrabNestBlock extends BlockWithEntity {
                 entity.refreshPositionAndAngles(pos.getX(), pos.getY(), pos.getZ(), 0.0F, 0.0F);
                 world.spawnEntity(entity);
                 EntryPoint.LOGGER.info("Crab exited");
+                this.crabBlockEntity = null;
             } else if (crab != null) {
                 EntryPoint.LOGGER.info("Crab lost nest");
                 crab.destroyNest();
@@ -80,6 +81,9 @@ public class CrabNestBlock extends BlockWithEntity {
         this.crab = crab;
     }
 
+    public void addCrab(CrabBlockEntity crabBlockEntity){
+        this.crabBlockEntity = crabBlockEntity;
+    }
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {

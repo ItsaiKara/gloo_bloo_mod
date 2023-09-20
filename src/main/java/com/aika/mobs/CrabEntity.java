@@ -86,9 +86,9 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             // this.goalSelector.add(3, new MeleeAttackGoal(this, 0.3D, true));
             this.goalSelector.add(3, new CrabDigSandGoal(this));
             this.goalSelector.add(4, new FleeEntityGoal(this, PlayerEntity.class, 8.0F, 0.2D, 0.8D));
-            this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.55D));
-            this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
-            this.goalSelector.add(7, new LookAroundGoal(this));
+            // this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.55D));
+            // this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
+            // this.goalSelector.add(7, new LookAroundGoal(this));
 
             // this.targetSelector.add(1, new );
         }
@@ -96,6 +96,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         public Block getNest (){
             return this.nestBlock;
         }
+        
         public boolean canNest(){
             if (this.nestBlock == null){
                 int x = (int) this.getX();

@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 
 import com.aika.EntryPoint;
+import com.aika.blocks.CrabNestBlock;
 import com.aika.mobs.CrabEntity;
 import com.google.common.collect.Lists;
 
@@ -30,14 +31,16 @@ public class CrabBlockEntity extends BlockEntity {
     
     public final static BooleanProperty IS_EGG = BooleanProperty.of("false");
     private World world;
+    private CrabNestBlock crabNestBlock;
     
     public final List<Crab> crabs = Lists.newArrayList();
 
     public CrabBlockEntity(BlockPos pos, BlockState state) {
         super(EntryPoint.CRAB_BLOCK_ENTITY, pos, state);
-    }
+        this.crabNestBlock = (CrabNestBlock) state.getBlock();
+        }
     
-    public void tryEnterNest(Entity entity, int ticksInHive) {
+    public void tryEnterNest(CrabEntity entity, int ticksInHive) {
         if (this.crabs.size() > 0) {
             System.out.println("CrabBlockEntity: Crab already in nest");
             return ;
@@ -46,14 +49,12 @@ public class CrabBlockEntity extends BlockEntity {
         entity.removeAllPassengers();
         System.out.println("CrabBlockEntity: Crab tries to enter nest" + entity.toString());
         this.crabs.add(new Crab(entity, ticksInHive));
-        if (1!=10) {
-            BlockPos blockPos = this.getPos();
-            entity.getWorld().playSound(null, (double)blockPos.getX(), (double)blockPos.getY(), blockPos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            // this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Emitter.of(entity, this.getCachedState()));
-            this.crabs.add(new Crab(entity, ticksInHive));
-            entity.discard();
-            super.markDirty();
-        }
+        this.crabNestBlock.addCrab(new CrabBlockEntity(this.pos, this.world.getBlockState(this.pos)));
+        BlockPos blockPos = this.getPos();
+        entity.getWorld().playSound(null, (double)blockPos.getX(), (double)blockPos.getY(), blockPos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        this.crabs.add(new Crab(entity, ticksInHive));
+        entity.discard();
+        super.markDirty();
     }
 
     @Nullable
