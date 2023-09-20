@@ -13,6 +13,7 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.registry.Registries;
 
 import net.minecraft.sound.BlockSoundGroup;
@@ -52,8 +53,10 @@ public class CrabNestBlock extends BlockWithEntity {
             //spawn crab
             if (this.crabBlockEntity != null) {
                 //spawn a crab
-                EntityType<?> entityType = Registries.ENTITY_TYPE.get(new Identifier("aika", "crab"));
-                Entity entity = entityType.create(world);
+                // EntityType<?> entityType = Registries.ENTITY_TYPE.get(new Identifier("aika", "crab"));
+                // Entity entity = entityType.create(world);
+                CrabEntity entity = new CrabEntity((EntityType<? extends PathAwareEntity>) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab")), world);
+                //
                 entity.refreshPositionAndAngles(pos.getX(), pos.getY(), pos.getZ(), 0.0F, 0.0F);
                 world.spawnEntity(entity);
                 EntryPoint.LOGGER.info("Crab exited");

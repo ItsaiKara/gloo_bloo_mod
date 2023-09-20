@@ -46,7 +46,7 @@ public class CrabBlockEntity extends BlockEntity {
         entity.removeAllPassengers();
         System.out.println("CrabBlockEntity: Crab tries to enter nest" + entity.toString());
         this.crabs.add(new Crab(entity, ticksInHive));
-        this.crabNestBlock.addCrab(new CrabBlockEntity(this.pos, this.world.getBlockState(this.pos)));
+        this.crabNestBlock.addCrab(new CrabBlockEntity(this.pos, entity.getWorld().getBlockState(this.pos)));
         BlockPos blockPos = this.getPos();
         entity.getWorld().playSound(null, (double) blockPos.getX(), (double) blockPos.getY(), blockPos.getZ(),
                 SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0f, 1.5f);
