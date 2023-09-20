@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 
 import net.minecraft.sound.BlockSoundGroup;
@@ -30,14 +31,14 @@ import net.minecraft.world.World;
 public class CrabNestBlock extends BlockWithEntity {
 
     public static final BooleanProperty HAS_CRAB = BooleanProperty.of("has_crab");
-    public static final BooleanProperty HAS_EGG = BooleanProperty.of("has_egg");
+    // public static final BooleanProperty HAS_EGG = BooleanProperty.of("has_egg");
     
     private CrabEntity crab = null;
     private CrabBlockEntity crabBlockEntity = null;
 
     public CrabNestBlock(Settings settings) {
         super(settings.sounds(BlockSoundGroup.SAND));
-        //TODO Auto-generated constructor stub
+        setDefaultState(getDefaultState().with(HAS_CRAB, false));
     }
 
     @Override
@@ -51,16 +52,16 @@ public class CrabNestBlock extends BlockWithEntity {
         if(!world.isClient && world.random.nextInt(1) == 0){
             EntryPoint.LOGGER.info("Nest destroyed ...");
             //spawn crab
-            if (this.crabBlockEntity != null) {
+            if (world.getBlockState(pos).get(HAS_CRAB)) {
                 //spawn a crab
                 // EntityType<?> entityType = Registries.ENTITY_TYPE.get(new Identifier("aika", "crab"));
                 // Entity entity = entityType.create(world);
                 CrabEntity entity = new CrabEntity((EntityType<? extends PathAwareEntity>) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab")), world);
                 //
-                entity.refreshPositionAndAngles(pos.getX(), pos.getY(), pos.getZ(), 0.0F, 0.0F);
+                entity.refreshPositionAndAngles(pos.getX()+0.5, pos.getY(), pos.getZ()+.5, 0.0F, 0.0F);
                 world.spawnEntity(entity);
                 EntryPoint.LOGGER.info("Crab exited");
-                this.crabBlockEntity = null;
+                world.setBlockState(pos, state.with(HAS_CRAB, false));
             } else if (crab != null) {
                 EntryPoint.LOGGER.info("Crab lost nest");
                 crab.destroyNest();
@@ -96,7 +97,7 @@ public class CrabNestBlock extends BlockWithEntity {
 
     @Override
     protected void appendProperties(net.minecraft.state.StateManager.Builder<Block, net.minecraft.block.BlockState> builder) {
-        builder.add(HAS_CRAB, HAS_EGG);
+        builder.add(HAS_CRAB);
     }
 
     @Override
@@ -112,6 +113,17 @@ public class CrabNestBlock extends BlockWithEntity {
     @Override
     public boolean hasSidedTransparency(BlockState state) {
         return true;
+    }
+
+    public BlockState getStateWithProperties(String property) {
+        if (property == "HAS_CRAB") {
+            return this.getDefaultState().with(HAS_CRAB, true);
+        }
+        return this.getDefaultState().with(HAS_CRAB, false);
+    }
+
+    public BlockPos getPos() {
+        return this.getPos();
     }
     
 } 

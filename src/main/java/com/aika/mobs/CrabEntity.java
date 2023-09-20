@@ -125,7 +125,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             this.nestPos = new BlockPos(x, y - 1, z);
             // this.nestBlock.setCrab(this);
             CrabBlockEntity newInhabitant = new CrabBlockEntity(this.nestPos, this.nestBlock.getStateWithProperties(this.nestBlock.getDefaultState()));
-            newInhabitant.tryEnterNest(this, 0);
+            newInhabitant.tryEnterNest(this, nestPos,  0);
             System.out.println("Nest made" + this.nestBlock.toString());
         }
         public void enterNest(){
