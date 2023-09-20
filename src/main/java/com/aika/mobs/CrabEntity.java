@@ -96,7 +96,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         public Block getNest (){
             return this.nestBlock;
         }
-        
+
         public boolean canNest(){
             if (this.nestBlock == null){
                 int x = (int) this.getX();
@@ -219,11 +219,6 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         public void setDisturbed(boolean disturbed){
             this.disturbed = disturbed;
         }
-
-
-
-
-
         /**
          * CrabDigSandGoal class
          * When a crab is on sand and attempts to dig either for food or nesting
