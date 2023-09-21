@@ -9,12 +9,14 @@ import com.aika.blocks.CrabNestBlock;
 import com.aika.mobs.CrabEntity;
 import com.google.common.collect.Lists;
 
+import net.fabricmc.loader.impl.util.log.Log;
 import net.minecraft.block.BlockState;
 
 import net.minecraft.block.entity.BlockEntity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 
@@ -66,16 +68,15 @@ public class CrabBlockEntity extends BlockEntity {
     //     return null;
     // }
 
-    // public boolean releaseCrab(World world, BlockPos pos, Crab crab, @Nullable List<Entity> entities) {
-    //     boolean bl = false;
-    //     world.playSound(null, pos, SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
-    //     // world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos,
-    //     // GameEvent.Emitter.of(entity2, world.getBlockState(pos)));
-    //     bl = world.spawnEntity(Registries.ENTITY_TYPE.get(new Identifier(EntryPoint.MOD_ID, "crab")).downcast(crab.crab));
-    //     world.setBlockState(pos, world.getBlockState(pos).with(CrabNestBlock.HAS_CRAB, false));
-    //     super.markDirty();
-    //     return bl;
-    // }
+    public boolean releaseCrab(World world, BlockPos pos, Crab crab, @Nullable List<Entity> entities) {
+        boolean bl = false;
+        world.playSound(null, pos, SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        CrabEntity entity = new CrabEntity((EntityType<? extends PathAwareEntity>) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab")), world);
+        entity.refreshPositionAndAngles(pos.getX()+0.5, pos.getY()+1, pos.getZ()+.5, 0.0F, 0.0F);
+        world.spawnEntity(entity);
+        super.markDirty();
+        return bl;
+    }
 
     private class Crab {
         private final Entity crab;
@@ -101,6 +102,16 @@ public class CrabBlockEntity extends BlockEntity {
     }
     
     public static void tick(World world, BlockPos pos, BlockState state, CrabBlockEntity be) {
-        // System.out.println("CrabBlockEntity: tick");
+        // if time is day attempt to spawn crab
+        if (world.isDay()) {
+            Log.info(null, "CrabBlockEntity: Daytime");
+            if (be.crabs.size() > 0) {
+                be.releaseCrab(world, pos, be.crabs.get(0), null);
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
     }
 }
