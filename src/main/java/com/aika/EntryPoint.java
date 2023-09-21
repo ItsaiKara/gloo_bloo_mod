@@ -51,7 +51,7 @@ public class EntryPoint implements ModInitializer {
 
 	public static final BlockEntityType<CrabBlockEntity> CRAB_BLOCK_ENTITY = Registry.register(
         Registries.BLOCK_ENTITY_TYPE,
-        new Identifier("tutorial", "demo_block_entity"),
+        new Identifier("gloo_bloo", "crab_block_entity"),
         FabricBlockEntityTypeBuilder.create(CrabBlockEntity::new, CRAB_NEST).build()
     );
 

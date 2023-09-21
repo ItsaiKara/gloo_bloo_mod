@@ -6,11 +6,14 @@ import com.aika.block_entities.CrabBlockEntity;
 
 // import net.fabricmc.fabric.api.client.networking.v1.C2SPlayChannelEvents.Register;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.PathAwareEntity;
@@ -28,7 +31,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class CrabNestBlock extends BlockWithEntity {
+public class CrabNestBlock extends BlockWithEntity  {
 
     public static final BooleanProperty HAS_CRAB = BooleanProperty.of("has_crab");
     // public static final BooleanProperty HAS_EGG = BooleanProperty.of("has_egg");
@@ -40,6 +43,7 @@ public class CrabNestBlock extends BlockWithEntity {
         super(settings.sounds(BlockSoundGroup.SAND));
         setDefaultState(getDefaultState().with(HAS_CRAB, false));
     }
+
 
     @Override
     public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance){
@@ -57,7 +61,6 @@ public class CrabNestBlock extends BlockWithEntity {
                 // EntityType<?> entityType = Registries.ENTITY_TYPE.get(new Identifier("aika", "crab"));
                 // Entity entity = entityType.create(world);
                 CrabEntity entity = new CrabEntity((EntityType<? extends PathAwareEntity>) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab")), world);
-                //
                 entity.refreshPositionAndAngles(pos.getX()+0.5, pos.getY(), pos.getZ()+.5, 0.0F, 0.0F);
                 world.spawnEntity(entity);
                 EntryPoint.LOGGER.info("Crab exited");
@@ -124,6 +127,11 @@ public class CrabNestBlock extends BlockWithEntity {
 
     public BlockPos getPos() {
         return this.getPos();
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, EntryPoint.CRAB_BLOCK_ENTITY, (world1, pos, state1, be) -> CrabBlockEntity.tick(world1, pos, state1, be));
     }
     
 } 

@@ -26,6 +26,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -61,6 +62,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
 
         public CrabEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
             super((EntityType<? extends AnimalEntity>) entityType, world);
+
             
         }
 
@@ -162,6 +164,9 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             }
         }
 
+        public void setCrabnest(CrabNestBlock crabnest){
+            this.nestBlock = (CrabNestBlock) this.getWorld().getBlockState(new BlockPos((int) this.getX(), (int) this.getY() - 1, (int) this.getZ())).getBlock();
+        }
 
         @Override
         protected void playHurtSound(DamageSource source){

@@ -99,4 +99,8 @@ public class CrabBlockEntity extends BlockEntity {
  
     // this.has_crab = nbt.getInt("has_crab");
     }
+    
+    public static void tick(World world, BlockPos pos, BlockState state, CrabBlockEntity be) {
+        // System.out.println("CrabBlockEntity: tick");
+    }
 }
