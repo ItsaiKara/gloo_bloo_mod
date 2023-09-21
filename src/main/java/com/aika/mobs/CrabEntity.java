@@ -2,6 +2,7 @@ package com.aika.mobs;
 
 
 import com.aika.mobs.ai.CrabFindNestGoal;
+import com.aika.EntryPoint;
 import com.aika.block_entities.CrabBlockEntity;
 import com.aika.blocks.CrabNestBlock;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -42,15 +43,17 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class CrabEntity extends AnimalEntity implements GeoEntity {
-        public final static int MAX_DIGTIME = 30;
-        public final static int MAX_DIG_COOLDOWN = 500;
-        private int fuseTimer = 80;
-        private boolean ignited = false;
-        private int digCooldown = MAX_DIG_COOLDOWN;
-        private int digTime = MAX_DIGTIME;
-        private boolean disturbed = false;
-        private CrabNestBlock nestBlock = null;
-        private BlockPos nestPos = null;
+        public final static int MAX_DIGTIME = 30; //Number of ticks the grab will dig for
+        public final static int MAX_DIG_COOLDOWN = 200; //Cooldown between digging
+        private int fuseTimer = 80; //Number of ticks before crab explodes
+        private boolean ignited = false; //Is the crab ignited
+        private int digCooldown = MAX_DIG_COOLDOWN; //Cooldown between digging redundant
+        private int digTime = MAX_DIGTIME; //Number of ticks the crab will dig for redundant
+        private boolean disturbed = false; //Is the crab disturbed by a player, or di it wander while digging
+        private CrabNestBlock nestBlock = null; //The crabnest block the crab has in memory
+        private BlockPos nestPos = null; //The position of the crabnest block the crab has in memory
+        public final static int MAX_NEST_ENTER_COOLDOWN = 500; //Cooldown before entering a nest at max
+        private int nestEnterCooldown = 0; //Cooldown before entering a nest
         //GEOLIBStuff
         private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
@@ -105,7 +108,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
                 int y = (int) this.getY();
                 int z = (int) this.getZ();
                 BlockState blockBellow = this.getWorld().getBlockState(new BlockPos(x, y - 1, z));
-                if (blockBellow.getBlock() == Blocks.SAND){
+                if (blockBellow.getBlock() == Blocks.SAND ){
                     return true;
                 } else {
                     return false;
@@ -183,6 +186,9 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         @Override
         public void tick(){
             super.tick();
+            if (this.nestEnterCooldown > 0){
+                this.nestEnterCooldown--;
+            }
             if (this.ignited){
                 this.fuseTimer--;
                 if (this.fuseTimer <= 0){
@@ -224,6 +230,12 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         public void setDisturbed(boolean disturbed){
             this.disturbed = disturbed;
         }
+
+        @Override
+        public PassiveEntity createChild(ServerWorld var1, PassiveEntity var2) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'createChild'");
+        }
         /**
          * CrabDigSandGoal class
          * When a crab is on sand and attempts to dig either for food or nesting
@@ -243,10 +255,16 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             int z = (int) this.crab.getZ();
             BlockState block = this.crab.getWorld().getBlockState(new BlockPos(x, y - 1, z));
             //if block is not sand return false
-            if (block.getBlock() != Blocks.SAND) {
+            if (block.getBlock() == Blocks.SAND || block.getBlock() == EntryPoint.CRAB_NEST) {
+                //block is valid : skip
+            } else {
+                //invalid block
                 return false;
             }
             if (this.crab.digCooldown > 0 ) {
+                return false;
+            }
+            if (this.crab.nestEnterCooldown > 0){
                 return false;
             }
             return true;
@@ -296,27 +314,28 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             this.crab.digCooldown = MAX_DIG_COOLDOWN;
             this.crab.setMovementSpeed((float)0.5D);
             //print isDisturbed
-            // System.out.println(this.crab.isDisturbed());
+            System.out.println(this.crab.isDisturbed());
             if (this.crab.isDisturbed()==false){
                 this.crab.playSound(SoundEvents.BLOCK_SAND_BREAK, 0.15F, 0.5F);
-                if (this.crab.canNest()){
-                    System.out.println("Crab can nest");
-                    //crab can nest so make a nest
-                    this.crab.makeNest();
+                if (this.crab.canNest()){ //check if digging is done and block is valid
+                    if(this.crab.nestPos == null){ //if already has a nest don't make a new one
+                        this.crab.makeNest();
+                    } else if (this.crab.canEat()){
+                        this.crab.tryToEat();
+                    } else {
+                        System.out.println("Crab didn't do anything");
+                    }
                 } else {
-                    System.out.println("Crab can't nest");
+                    System.out.println("Crab was disturbed " + this.crab.isDisturbed() );
                     //crab can't nest so try to eat
                     this.crab.tryToEat();
                 }
             }
+            this.crab.setDisturbed(false);
         }
     }
 
-    @Override
-    public PassiveEntity createChild(ServerWorld var1, PassiveEntity var2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createChild'");
-    }
+    
 
     
 

@@ -79,6 +79,19 @@ public class CrabBlockEntity extends BlockEntity {
         return bl;
     }
 
+    public static void tick(World world, BlockPos pos, BlockState state, CrabBlockEntity be) {
+        // System.out.println(world.getAmbientDarkness() + " " + world.getTime() + " " + world.getAmbientDarkness());
+        if (world.getAmbientDarkness() < 4) {
+            // System.out.println(be.crabs.size());
+            if (be.getWorld().getBlockState(pos).get(CrabNestBlock.HAS_CRAB)) {
+                be.releaseCrab(world, pos, null);
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
+    }
     private class Crab {
         private final Entity crab;
         private final int ticksInHive;
@@ -100,19 +113,5 @@ public class CrabBlockEntity extends BlockEntity {
     super.readNbt(nbt);
  
     // this.has_crab = nbt.getInt("has_crab");
-    }
-    
-    public static void tick(World world, BlockPos pos, BlockState state, CrabBlockEntity be) {
-        // System.out.println(world.getAmbientDarkness() + " " + world.getTime() + " " + world.getAmbientDarkness());
-        if (world.getAmbientDarkness() < 4) {
-            // System.out.println(be.crabs.size());
-            if (be.getWorld().getBlockState(pos).get(CrabNestBlock.HAS_CRAB)) {
-                be.releaseCrab(world, pos, null);
-            } else {
-                return;
-            }
-        } else {
-            return;
-        }
     }
 }
