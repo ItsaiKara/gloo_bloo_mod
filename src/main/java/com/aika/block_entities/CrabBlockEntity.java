@@ -68,12 +68,13 @@ public class CrabBlockEntity extends BlockEntity {
     //     return null;
     // }
 
-    public boolean releaseCrab(World world, BlockPos pos, Crab crab, @Nullable List<Entity> entities) {
+    public boolean releaseCrab(World world, BlockPos pos, @Nullable List<Entity> entities) {
         boolean bl = false;
         world.playSound(null, pos, SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
         CrabEntity entity = new CrabEntity((EntityType<? extends PathAwareEntity>) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab")), world);
         entity.refreshPositionAndAngles(pos.getX()+0.5, pos.getY()+1, pos.getZ()+.5, 0.0F, 0.0F);
-        world.spawnEntity(entity);
+        bl = world.spawnEntity(entity);
+        if (bl) entity.getWorld().setBlockState(pos, entity.getWorld().getBlockState(pos).with(CrabNestBlock.HAS_CRAB, false));
         super.markDirty();
         return bl;
     }
@@ -102,11 +103,11 @@ public class CrabBlockEntity extends BlockEntity {
     }
     
     public static void tick(World world, BlockPos pos, BlockState state, CrabBlockEntity be) {
-        // if time is day attempt to spawn crab
-        if (world.isDay()) {
-            Log.info(null, "CrabBlockEntity: Daytime");
-            if (be.crabs.size() > 0) {
-                be.releaseCrab(world, pos, be.crabs.get(0), null);
+        // System.out.println(world.getAmbientDarkness() + " " + world.getTime() + " " + world.getAmbientDarkness());
+        if (world.getAmbientDarkness() < 4) {
+            // System.out.println(be.crabs.size());
+            if (be.getWorld().getBlockState(pos).get(CrabNestBlock.HAS_CRAB)) {
+                be.releaseCrab(world, pos, null);
             } else {
                 return;
             }
