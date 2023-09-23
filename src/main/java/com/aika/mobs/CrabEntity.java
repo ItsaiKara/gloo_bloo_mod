@@ -50,8 +50,8 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         private int digCooldown = MAX_DIG_COOLDOWN; //Cooldown between digging redundant
         private int digTime = MAX_DIGTIME; //Number of ticks the crab will dig for redundant
         private boolean disturbed = false; //Is the crab disturbed by a player, or di it wander while digging
-        private CrabNestBlock nestBlock = null; //The crabnest block the crab has in memory
-        private BlockPos nestPos = null; //The position of the crabnest block the crab has in memory
+        private CrabNestBlock nestBlock; //The crabnest block the crab has in memory
+        private BlockPos nestPos ; //The position of the crabnest block the crab has in memory
         public final static int MAX_NEST_ENTER_COOLDOWN = 500; //Cooldown before entering a nest at max
         private int nestEnterCooldown = 0; //Cooldown before entering a nest
         //GEOLIBStuff
@@ -103,12 +103,12 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         }
 
         public boolean canNest(){
-            if (this.nestBlock == null){
+            if (this.nestPos == null){
                 int x = (int) this.getX();
                 int y = (int) this.getY();
                 int z = (int) this.getZ();
                 BlockState blockBellow = this.getWorld().getBlockState(new BlockPos(x, y - 1, z));
-                if (blockBellow.getBlock() == Blocks.SAND ){
+                if (blockBellow.getBlock() == Blocks.SAND || EntryPoint.CRAB_NEST == blockBellow.getBlock()){
                     return true;
                 } else {
                     return false;
@@ -124,11 +124,14 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             int x = (int) this.getX();
             int y = (int) this.getY();
             int z = (int) this.getZ();
-            // this.nestBlock = this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
-            this.getWorld().setBlockState(new BlockPos(x, y - 1, z), Registries.BLOCK.get(new Identifier("gloo_bloo", "crabnest_block")).getDefaultState());
-            this.nestBlock = (CrabNestBlock) this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
-            this.nestPos = new BlockPos(x, y - 1, z);
-            // this.nestBlock.setCrab(this);
+            //get block bellow
+            if ((CrabNestBlock) this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != EntryPoint.CRAB_NEST){
+                // this.nestBlock = this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
+                this.getWorld().setBlockState(new BlockPos(x, y - 1, z), Registries.BLOCK.get(new Identifier("gloo_bloo", "crabnest_block")).getDefaultState());
+                this.nestBlock = (CrabNestBlock) this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
+                this.nestPos = new BlockPos(x, y - 1, z);
+                // this.nestBlock.setCrab(this);
+            }
             CrabBlockEntity newInhabitant = new CrabBlockEntity(this.nestPos, this.nestBlock.getStateWithProperties(this.nestBlock.getDefaultState()));
             newInhabitant.tryEnterNest(this, nestPos,  0);
             System.out.println("Nest made" + this.nestBlock.toString());
@@ -161,8 +164,9 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
                 int x = (int) this.getX();
                 int y = (int) this.getY();
                 int z = (int) this.getZ();
-                this.getWorld().setBlockState(new BlockPos(x, y - 1, z), Blocks.AIR.getDefaultState());
+                // this.getWorld().setBlockState(new BlockPos(x, y - 1, z), Blocks.AIR.getDefaultState());
                 this.heal(1.0F);
+                this.playSound(SoundEvents.ENTITY_PLAYER_BURP, 0.15F, 1.5F);
                 System.out.println("Crab ate sand");
             }
         }
@@ -235,6 +239,10 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         public PassiveEntity createChild(ServerWorld var1, PassiveEntity var2) {
             // TODO Auto-generated method stub
             throw new UnsupportedOperationException("Unimplemented method 'createChild'");
+        }
+
+        public void setNestPos(BlockPos blockPos) {
+            this.nestPos = blockPos;
         }
         /**
          * CrabDigSandGoal class
@@ -316,24 +324,22 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             //print isDisturbed
             System.out.println(this.crab.isDisturbed());
             if (this.crab.isDisturbed()==false){
+                System.out.println(this.crab.nestPos);
                 this.crab.playSound(SoundEvents.BLOCK_SAND_BREAK, 0.15F, 0.5F);
                 if (this.crab.canNest()){ //check if digging is done and block is valid
-                    if(this.crab.nestPos == null){ //if already has a nest don't make a new one
-                        this.crab.makeNest();
-                    } else if (this.crab.canEat()){
-                        this.crab.tryToEat();
-                    } else {
-                        System.out.println("Crab didn't do anything");
-                    }
-                } else {
-                    System.out.println("Crab was disturbed " + this.crab.isDisturbed() );
-                    //crab can't nest so try to eat
+                    this.crab.makeNest();
+                    System.out.println("Crab made nest");
+                } else if (this.crab.canCrabEat()){ 
                     this.crab.tryToEat();
+                    System.out.println("Tried to eat");
+                } 
+            } else {
+                    System.out.println("Crab was disturbed " + this.crab.isDisturbed());
                 }
-            }
             this.crab.setDisturbed(false);
         }
     }
+        
 
     
 

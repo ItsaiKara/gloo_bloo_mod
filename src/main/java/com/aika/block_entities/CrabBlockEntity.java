@@ -74,7 +74,10 @@ public class CrabBlockEntity extends BlockEntity {
         CrabEntity entity = new CrabEntity((EntityType<? extends PathAwareEntity>) Registries.ENTITY_TYPE.get(new Identifier("gloo_bloo", "crab")), world);
         entity.refreshPositionAndAngles(pos.getX()+0.5, pos.getY()+1, pos.getZ()+.5, 0.0F, 0.0F);
         bl = world.spawnEntity(entity);
-        if (bl) entity.getWorld().setBlockState(pos, entity.getWorld().getBlockState(pos).with(CrabNestBlock.HAS_CRAB, false));
+        if (bl){
+            entity.getWorld().setBlockState(pos, entity.getWorld().getBlockState(pos).with(CrabNestBlock.HAS_CRAB, false));
+            entity.setNestPos(new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
+        } 
         super.markDirty();
         return bl;
     }
