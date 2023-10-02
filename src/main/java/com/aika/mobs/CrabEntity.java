@@ -65,8 +65,6 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
 
         public CrabEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
             super((EntityType<? extends AnimalEntity>) entityType, world);
-
-            
         }
 
         public static DefaultAttributeContainer.Builder setAttibutes(){
@@ -125,7 +123,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             int y = (int) this.getY();
             int z = (int) this.getZ();
             //get block bellow
-            if ((CrabNestBlock) this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != EntryPoint.CRAB_NEST){
+            if (this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != EntryPoint.CRAB_NEST){
                 // this.nestBlock = this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
                 this.getWorld().setBlockState(new BlockPos(x, y - 1, z), Registries.BLOCK.get(new Identifier("gloo_bloo", "crabnest_block")).getDefaultState());
                 this.nestBlock = (CrabNestBlock) this.getWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock();
@@ -159,7 +157,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         }
 
         public void tryToEat() {
-            if (this.canCrabEat()){
+            if (this.canCrabEat()==true){
                 //eat block
                 int x = (int) this.getX();
                 int y = (int) this.getY();
@@ -261,9 +259,10 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             int x = (int) this.crab.getX();
             int y = (int) this.crab.getY();
             int z = (int) this.crab.getZ();
-            BlockState block = this.crab.getWorld().getBlockState(new BlockPos(x, y - 1, z));
+            BlockState block = this.crab.getWorld().getBlockState(new BlockPos(x, y-1, z));
             //if block is not sand return false
-            if (block.getBlock() == Blocks.SAND || block.getBlock() == EntryPoint.CRAB_NEST) {
+            System.out.println(block.getBlock().toString() + " cand dig" + x + " " + (y-1) + " " + (z));
+            if (block.getBlock() == Blocks.SAND /*|| block.getBlock() == EntryPoint.CRAB_NEST*/) {
                 //block is valid : skip
             } else {
                 //invalid block
@@ -329,10 +328,12 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
                 if (this.crab.canNest()){ //check if digging is done and block is valid
                     this.crab.makeNest();
                     System.out.println("Crab made nest");
-                } else if (this.crab.canCrabEat()){ 
+                } else if (this.crab.canCrabEat() == true){ 
                     this.crab.tryToEat();
                     System.out.println("Tried to eat");
-                } 
+                }  else {
+                    System.out.println("Crab can't do shit");
+                }
             } else {
                     System.out.println("Crab was disturbed " + this.crab.isDisturbed());
                 }
