@@ -93,9 +93,9 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             this.goalSelector.add(1, new SwimGoal(this));
             this.goalSelector.add(2, new CrabFindNestGoal(this));
             // this.goalSelector.add(3, new MeleeAttackGoal(this, 0.3D, true));
-            this.goalSelector.add(3, new CrabDigSandGoal(this));
-            this.goalSelector.add(4, new CrabEnterNestGoal(this, 0.55D));
-            this.goalSelector.add(4, new FleeEntityGoal(this, PlayerEntity.class, 8.0F, 0.2D, 0.8D));
+            this.goalSelector.add(3, new CrabEnterNestGoal(this, 0.5D));
+            this.goalSelector.add(4, new CrabDigSandGoal(this));
+            // this.goalSelector.add(4, new FleeEntityGoal(this, PlayerEntity.class, 8.0F, 0.2D, 0.8D));
             // this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.55D));
             // this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
             // this.goalSelector.add(7, new LookAroundGoal(this));
@@ -385,21 +385,33 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         @Override
         public void start(){
             System.out.println("Started goal");
+            this.crab.speed = 0.5F;
             this.crab.navigation.startMovingTo(this.crab.getNestPos().getX(), this.crab.getNestPos().getY(), this.crab.getNestPos().getZ(), this.crab.speed);
         }
 
         @Override
         public void tick(){
             tick_goto_nest++;
-            if (tick_goto_nest >= MAX_ATTEMPT_TIME_GOTO_NEST){
+            if (tick_goto_nest >= MAX_ATTEMPT_TIME_GOTO_NEST*1000){
+                this.stop();
+                System.out.println("Stopped going to nest too long" + tick_goto_nest);
+            }
+            // if (this.crab.navigation.isIdle()){
+            //     System.out.println("Crab is idle");
+            //     this.stop();
+            // }
+            if (this.crab.getNestPos().getSquaredDistance(this.crab.getX(), this.crab.getY(),this.crab.getZ()) < 1.2D){
+                System.out.println("Crab reached nest");
                 this.stop();
             }
+                
         }
 
         @Override
         public void stop(){
             this.crab.navigation.stop();
-            System.out.println("stopped going");
+            System.out.println("stopped going" + tick_goto_nest);
+            tick_goto_nest = 0;
         }
 
     }
