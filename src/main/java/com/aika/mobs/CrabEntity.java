@@ -48,7 +48,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class CrabEntity extends AnimalEntity implements GeoEntity {
-        public final static int MAX_DIGTIME = 30; //Number of ticks the grab will dig for
+        public final static int MAX_DIGTIME = 30; //Number of ticks the crab will dig for
         public final static int MAX_DIG_COOLDOWN = 200; //Cooldown between digging
         private int fuseTimer = 80; //Number of ticks before crab explodes
         private boolean ignited = false; //Is the crab ignited
