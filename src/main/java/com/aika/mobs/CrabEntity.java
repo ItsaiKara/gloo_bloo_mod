@@ -379,6 +379,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             System.out.println("distance ok" + this.crab.getNestPos().getSquaredDistance(x,y,z));
             if (world.getAmbientDarkness()< 4) return false;
             System.out.println("darkness ok" + world.getAmbientDarkness());
+            System.out.println(tick_goto_nest + " " + MAX_ATTEMPT_TIME_GOTO_NEST);
             return true;
         }
 
@@ -392,8 +393,9 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
         @Override
         public void tick(){
             tick_goto_nest++;
-            if (tick_goto_nest >= MAX_ATTEMPT_TIME_GOTO_NEST*1000){
+            if (tick_goto_nest >= MAX_ATTEMPT_TIME_GOTO_NEST){
                 this.stop();
+                // tick_goto_nest = 0;
                 System.out.println("Stopped going to nest too long" + tick_goto_nest);
             }
             // if (this.crab.navigation.isIdle()){
