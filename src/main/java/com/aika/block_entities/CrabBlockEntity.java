@@ -84,6 +84,7 @@ public class CrabBlockEntity extends BlockEntity {
 
     public static void tick(World world, BlockPos pos, BlockState state, CrabBlockEntity be) {
         // System.out.println(world.getAmbientDarkness() + " " + world.getTime() + " " + world.getAmbientDarkness());
+        if (world==null) return ;
         if (world.getAmbientDarkness() < 4) {
             // System.out.println(be.crabs.size());
             if (be.getWorld().getBlockState(pos).get(CrabNestBlock.HAS_CRAB)) {

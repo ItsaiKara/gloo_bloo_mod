@@ -33,9 +33,13 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkStatus;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -93,7 +97,7 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
             this.goalSelector.add(1, new SwimGoal(this));
             this.goalSelector.add(2, new CrabFindNestGoal(this));
             // this.goalSelector.add(3, new MeleeAttackGoal(this, 0.3D, true));
-            this.goalSelector.add(3, new CrabEnterNestGoal(this, 0.5D));
+            this.goalSelector.add(3, new CrabEnterNestGoal(this, 1d, 50,3));
             this.goalSelector.add(4, new CrabDigSandGoal(this));
             // this.goalSelector.add(4, new FleeEntityGoal(this, PlayerEntity.class, 8.0F, 0.2D, 0.8D));
             // this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.55D));
@@ -355,67 +359,42 @@ public class CrabEntity extends AnimalEntity implements GeoEntity {
     /**
      *  Goal to make the crab go to its nest
      * */
-    public class CrabEnterNestGoal extends Goal {
-        private CrabEntity crab;
-        private int tick_goto_nest = 0;
-        public CrabEnterNestGoal(CrabEntity crab, Double moveSpeed){
-            this.crab = crab;
-            this.crab.speed = moveSpeed.floatValue();
+    public class CrabEnterNestGoal extends MoveToTargetPosGoal {
+        private BlockPos target;
+        private CrabEntity mob;
+
+        public CrabEnterNestGoal(PathAwareEntity mob, double speed, int range, int maxYDifference) {
+            super(mob, speed, range, maxYDifference);
+            this.mob = (CrabEntity) mob;
+            this.target = this.mob.getNestPos();
+            super.targetPos = this.target;
         }
 
         @Override
-        public boolean canStart() {
-            System.out.println("Begin goal");
-            World world = crab.getWorld();
-            Double x = this.crab.getX();
-            Double y = this.crab.getY();
-            Double z = this.crab.getZ();
-            if (world == null) return false;
-            System.out.println("World not null"); 
-            //if is day
-            if (this.crab.getNestPos() == null) return false;
-            System.out.println("nest not null" + this.crab.getNestPos());
-            if (this.crab.getNestPos().getSquaredDistance(x,y,z) > 60d) return false; 
-            System.out.println("distance ok" + this.crab.getNestPos().getSquaredDistance(x,y,z));
-            if (world.getAmbientDarkness()< 4) return false;
-            System.out.println("darkness ok" + world.getAmbientDarkness());
-            System.out.println(tick_goto_nest + " " + MAX_ATTEMPT_TIME_GOTO_NEST);
+        public boolean canStart(){
+            if (this.mob.getWorld()==null) return false;
+            //Can't start if day
+            if(this.mob.getWorld().getAmbientDarkness() < 4) return false; ///if too bright it's day give up
+            System.out.println(this.mob.getWorld().getAmbientDarkness());
+            if (this.target == null || this.mob.getNestPos() == null) return false; //if no nest give up returning
+            System.out.println(this.target.toString() + "\t" + this.mob.getNestPos().toString());
             return true;
         }
 
+
         @Override
-        public void start(){
-            System.out.println("Started goal");
-            this.crab.speed = 0.5F;
-            this.crab.navigation.startMovingTo(this.crab.getNestPos().getX(), this.crab.getNestPos().getY(), this.crab.getNestPos().getZ(), this.crab.speed);
+        protected boolean isTargetPos(WorldView world, BlockPos pos) {
+            Chunk chunk = world.getChunk(ChunkSectionPos.getSectionCoord(pos.getX()), ChunkSectionPos.getSectionCoord(pos.getZ()), ChunkStatus.FULL, false);
+            System.out.println((chunk.getBlockState(pos).isOf(EntryPoint.CRAB_NEST) && chunk.getBlockState(pos.up()).isAir()) + "\t" + "is ok?");
+            return chunk.getBlockState(pos).isOf(EntryPoint.CRAB_NEST) && chunk.getBlockState(pos.up()).isAir();
+
         }
 
         @Override
-        public void tick(){
-            tick_goto_nest++;
-            if (tick_goto_nest >= MAX_ATTEMPT_TIME_GOTO_NEST){
-                this.stop();
-                // tick_goto_nest = 0;
-                System.out.println("Stopped going to nest too long" + tick_goto_nest);
-            }
-            // if (this.crab.navigation.isIdle()){
-            //     System.out.println("Crab is idle");
-            //     this.stop();
-            // }
-            if (this.crab.getNestPos().getSquaredDistance(this.crab.getX(), this.crab.getY(),this.crab.getZ()) < 1.2D){
-                System.out.println("Crab reached nest");
-                this.stop();
-            }
-                
+        public double getDesiredDistanceToTarget(){
+            return 1.1D;
         }
-
-        @Override
-        public void stop(){
-            this.crab.navigation.stop();
-            System.out.println("stopped going" + tick_goto_nest);
-            tick_goto_nest = 0;
-        }
-
+    
     }
     
 
